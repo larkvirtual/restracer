@@ -1,14 +1,2 @@
-mercurial:
-
-1) Put these lines into ~/.hgrc
-[ui]
-username = Your Name <your@email>
-
-[extensions]
-hgext.mq =
-hgext.purge =
-
--------------------------------------
-
 text editor:
 4 spaces instead of tab.
