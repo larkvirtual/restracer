@@ -1,0 +1,3 @@
+#!/bin/sh
+
+ld $* /usr/local/lib/art/art.o

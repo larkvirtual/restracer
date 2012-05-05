@@ -1,0 +1,39 @@
+#!/bin/sh
+
+option_compile=0
+option_output=0
+compilation=0
+linking=0
+
+for arg in $*; do
+   if [ "$arg" = "-c" ]; then option_compile=1;
+   elif [ "$arg" = "-o" ]; then option_output=1;
+   elif [ "$arg" = "-E" ]; then option_compile=1;
+   fi
+done
+
+if [ "$option_output" -eq "1" ]; then
+    if [ "$option_compile" -eq "1" ]; then
+        compilation=1
+    else
+        linking=1
+    fi
+elif [ "$option_compile" -eq "1" ]; then
+    compilation=1
+fi
+
+if [ "$compilation" -eq "1" ]; then
+    if [ "$linking" -eq "0" ]; then
+        echo "doing -include /usr/local/include/art.h"
+        gcc -include /usr/local/include/art.h $*
+    else
+        echo "doing -include /usr/local/include/art.h /usr/local/lib/art/art.o"
+        gcc -include /usr/local/include/art.h $* /usr/local/lib/art/art.o
+    fi
+elif [ "$linking" -eq "1" ]; then
+    echo "doing /usr/local/lib/art/art.o"
+    gcc $* /usr/local/lib/art/art.o
+else
+    echo "doing -include /usr/local/include/art.h"
+    gcc -include /usr/local/include/art.h $*
+fi

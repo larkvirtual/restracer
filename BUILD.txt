@@ -1,0 +1,20 @@
+One can build ART with few options:
+
+1. with GNU Make
+Pros: it's GNU Make
+Cons: current Makefiles doesn't contain depend-targets, so you can build
+from scratch with it, but you change source, you have to make clean and then
+make again.
+
+2. with SCons
+Pros: It watching depends, so you can safely call scons if you changed source.
+Cons: you have to install SCons
+
+3. with ./bulkbuild.sh
+Pros: If you have just to build source, you can call it.
+      You don't need GNU Make or SCons
+Cons: it's hardcoded with compiler "gcc -O3", but one can easily change it
+for appropriate environment.
+
+4. with ./make-distro-dynamic.sh <version> (it uses SCons currently)
+To build binaries

@@ -1,0 +1,12 @@
+Debian GNU/Linux, Ubuntu
+# apt-get install libxml++2.6-dev g++
+
+FreeBSD
+# pkg_add -r libxml++26 gmake
+# (optional?) pkg_add -r pcre
+
+Gentoo
+# emerge dev-cpp/libxmlpp dev-util/pkgconfig
+
+Arch
+# pacman -S libxml++

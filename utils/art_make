@@ -1,0 +1,15 @@
+#!/bin/sh
+
+TARGET=art
+
+# Default toolchain is GCC
+#if [ "$CC" == "" ]; then CC=gcc; export CC; fi
+#if [ "$CXX" == "" ]; then CXX=g++; export CXX; fi
+#if [ "$LD" == "" ]; then LD=ld; fi
+
+#if [ "$CC" == "" ]; then CC=clang; fi
+#if [ "$CXX" == "" ]; then CXX=clang; fi
+#if [ "$LD" == "" ]; then LD=clang; fi
+
+#CC=$TARGET-$(CC) CXX=$TARGET-$(CXX) LD=$TARGET-$(LD) make $*
+CC=$TARGET-gcc CXX=$TARGET-g++ LD=$TARGET-ld make $*

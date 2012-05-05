@@ -1,0 +1,2 @@
+Error 007: bad handle 0x usage by heap-memory:fwrite at 006.c:12
+Error: Unallocated resource usage 0x by stream-io:fwrite at 006.c:12

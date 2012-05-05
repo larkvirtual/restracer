@@ -1,0 +1,8 @@
+# -*- coding: utf-8 -*-
+Import ('env')
+
+env.Append(CPPPATH = Split('#/libs/libtplreader #/libs/liblinefetch')
+    ,LIBPATH = Split('#/libs/libtplreader #/libs/liblinefetch')
+    ,LIBS = Split('tplreader linefetch'))
+
+env.Program('artrepgen', Glob('*.cc'))

@@ -1,0 +1,10 @@
+[ ] art_trace(): убрать аргумент n?
+
+[ ] в протокол писать file:line, а не file
+line
+.
+
+[ ] добавить запись имени (alloca?) Tor'а, чтобы в последствии указать его.
+
+[ ] rss: security, announce
+[ ] maillist: security, announce, devel, user
