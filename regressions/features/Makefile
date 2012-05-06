@@ -7,8 +7,9 @@ networked-method: build-n-run-networked.sh usleep
 	@echo "*******************************************************************"
 	@echo "* Now I will run network connection testing for client and server."
 	@echo "* At the end you have to see the same number of passed test as for"
-	@echo "* tracing via tracefile. Else (on too slow or too fast machine) tune"
+	@echo "* tracing via tracefile. Else (on slow machine) tune"
 	@echo "* argument for ./usleep in build-n-run-networked.sh script."
+	@echo "* For example, try to set ./usleep argument into 32 or 64 value."
 	@echo "* Press ENTER when ready..."
 	@echo "*******************************************************************"
 	@read line
