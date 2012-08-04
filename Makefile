@@ -32,18 +32,18 @@ install: all
 	artlibgen/src/artlibgen artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c
 	artlibgen/src/artlibgen artlibgen/templates/posix-gcc-mt-file-fork.xml art_fork.h art_fork.c
 	$(CC) -c art.c art_fork.c -g -ggdb -Wno-pointer-to-int-cast
-	cp art.h art_fork.h /usr/local/include
-	mkdir -p /usr/local/lib/art
-	cp art.o art_fork.o /usr/local/lib/art
-	cp artlibgen/src/artlibgen artrepgen/artrepgen utils/art* /usr/local/bin
+	cp art.h art_fork.h $(DESTDIR)/include
+	mkdir -p $(DESTDIR)/lib/art
+	cp art.o art_fork.o $(DESTDIR)/lib/art
+	cp artlibgen/src/artlibgen artrepgen/artrepgen utils/art* $(DESTDIR)/bin
 
 deinstall: uninstall
 
 uninstall:
-	rm -f /usr/local/bin/artlibgen /usr/local/bin/artrepgen \
-/usr/local/bin/art_make /usr/local/bin/art-gcc /usr/local/bin/art-g++ \
-/usr/local/bin/art-ld /usr/local/bin/art_fork_make /usr/local/bin/art-fork-gcc \
-/usr/local/bin/art-fork-g++ /usr/local/bin/art-fork-ld
-	rm -f /usr/local/include/art.h /usr/local/lib/art/art.o
-	rm -f /usr/local/include/art_fork.h /usr/local/lib/art/art_fork.o
-	rm -rf /usr/local/lib/art
+	rm -f $(DESTDIR)/bin/artlibgen $(DESTDIR)/bin/artrepgen \
+$(DESTDIR)/bin/art_make $(DESTDIR)/bin/art-gcc $(DESTDIR)/bin/art-g++ \
+$(DESTDIR)/bin/art-ld $(DESTDIR)/bin/art_fork_make $(DESTDIR)/bin/art-fork-gcc \
+$(DESTDIR)/bin/art-fork-g++ $(DESTDIR)/bin/art-fork-ld
+	rm -f $(DESTDIR)/include/art.h $(DESTDIR)/lib/art/art.o
+	rm -f $(DESTDIR)/include/art_fork.h $(DESTDIR)/lib/art/art_fork.o
+	rm -rf $(DESTDIR)/lib/art
