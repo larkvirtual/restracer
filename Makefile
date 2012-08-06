@@ -1,3 +1,5 @@
+DESTDIR?=/usr/local
+
 debug:
 	CFLAGS="-g -ggdb -Wall -Wextra -Werror -ansi -DART_DEBUG_INSERT_DEVEL_COMMENT \
 -DART_DEBUG" $(MAKE) all
