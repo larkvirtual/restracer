@@ -32,7 +32,19 @@ int main(int argc, char **argv) {
         fetcher = new CFileLineFetcher;
         fetcher->attach(argv[2]); // FIXME: проверить возвращаемое значение
 
-        return trace(fetcher);
+
+        bool ret_val = false;
+        try
+        {
+            ret_val = trace(fetcher);
+        }
+        catch(const char *msg)
+        {
+            cerr << "Received exception: \"" << msg <<"\"\nIncorrect input file\n" 
+            << "Perhaps the program is stopped incorrectly";
+        }
+
+        return ret_val;
     }
     else if(3 == argc && (0 == strcmp(argv[1], "--sock"))) {
         int listenSocket = ltn_CreateListen_s(atoi(argv[2]));
