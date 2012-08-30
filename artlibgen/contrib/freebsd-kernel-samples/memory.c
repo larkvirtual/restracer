@@ -7,7 +7,7 @@
 
 MALLOC_DECLARE (M_MEM);
 MALLOC_DEFINE (M_MEM, "memory", "buffer for array");
-static int event_handler (struct module *module, int event, void *arg) 
+static int event_handler (struct module *module, int event, void *arg)
 {
 	int e=0;
 	static int *array,i=0;
@@ -25,7 +25,7 @@ static int event_handler (struct module *module, int event, void *arg)
 			{
 				array[i]=i;
 				uprintf ("%d \n",array[i]);
-			}	
+			}
 			break;
 		case MOD_UNLOAD:
 			uprintf("End\n");

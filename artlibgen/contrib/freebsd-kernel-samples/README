@@ -1,3 +1,3 @@
-To compile the kernel module run - make; 
-To download the kernel module - kldload ./memory_work.ko
+To compile the kernel module run - make;
+To load the kernel module - kldload ./memory_work.ko
 To unload the kernel module - kldunload ./memory_work.ko
