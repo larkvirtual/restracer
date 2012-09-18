@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<template
+  __format__="1"
+  name="POSIX/gcc multithreaded standalone"
+  prefix="art_"
+  errlogmode="tracefile.err"
+  trap_on_io_err="true"
+  remote_mode="false"
+  force_flush="true"
+  fork_enabled="false"
+  multithreaded="true"
+  art_start_selfinit="true"
+  threading="posix"
+  compiler_type="gcc"
+  trace_target="tracefile.out">
+
+  <!-- domain names have to be spaces-free -->
+
+  <domain
+    name="system-information"
+    float_handle="false"
+    includesGlobal="true"
+    >
+    <!-- bad_handle -->
+    <expr
+      oper="=="
+      type="int"
+      value="-1"
+    />
+    <includes>/sys/sysctl.h</includes>
+    <tor
+       __type__="sysctl"
+       name="sysctl"
+       float_arg_n1="0"
+       float_arg_n2="0"
+       is_handle_arg_out="false"
+       handle_arg_out=""
+       cpp_alias=""
+       >
+      <validateDom_before>system-information</validateDom_before>
+      <args
+        type="int"
+        name=""
+      />
+      <args
+        type="const int*"
+        name="name"
+      />
+      <args
+	type="u_int"
+	name="namelen"
+      />
+      <args
+	type="void*"
+	name="oldp"
+      />
+      <args
+	type="size_t*"
+	name="oldlenp"
+      />
+      <args
+        type="const void*"
+	name="newp"
+      />
+      <args
+	type="size_t"
+	name="newlen"
+      />
+      <!-- badRetCode -->
+      <expr
+        oper="=="
+        type="int"
+        value="-1"
+      />
+    </tor>
+
+    <tor
+       __type__="sysctl"
+      name="sysctlbyname"
+      float_arg_n1="0"
+      float_arg_n2="0"
+      is_handle_arg_out="false"
+      handle_arg_out=""
+      cpp_alias=""
+      >
+      <validateDom_before>system-information</validateDom_before>
+      <args
+        type="int"
+        name=""
+      />
+      <args
+        type="const char*"
+        name="name"
+      />
+      <args
+        type="void*"
+        name="oldp"
+      />
+      <args
+	type="size_t*"
+	name="oldlenp"
+      />
+      <args
+	type="const void*"
+	name="newp"
+      />
+      <args
+	type="size_t"
+	name="newlen"
+      />
+      <!-- badRetCode -->
+      <expr
+        oper="=="
+        type="int"
+        value="-1"
+      />
+    </tor>
+
+    <tor
+      __type__="sysctl"
+      name="sysctlnametomib"
+      float_arg_n1="0"
+      float_arg_n2="0"
+      is_handle_arg_out="false"
+      handle_arg_out=""
+      cpp_alias=""
+      >
+      <validateDom_before>system-information</validateDom_before>
+      <args
+        type="int"
+        name=""
+      />
+      <args
+        type="const char*"
+        name="name"
+      />
+      <args
+	type="int*"
+        name="mibp"
+      />
+      <args
+	type="size_t*"
+	name="sizep"
+      />
+      <expr
+	oper="=="
+	type="int"
+	value="-1"
+      />
+    </tor>
+  </domain>
+</template>
