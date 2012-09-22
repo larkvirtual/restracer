@@ -312,10 +312,6 @@ void	Generator_C_Header(CTemplate &tpl, ofstream &head){
     head << "#ifndef __pd_" << tpl.prefix << "h__" << endl;
     head << "#define __pd_" << tpl.prefix << "h__" << endl << endl;
 
-    head << "#ifdef __cplusplus" << endl;
-    head << "extern \"C\" {" << endl;
-    head << "#endif" << endl << endl;
-
     if(tpl.multithreaded){
         if(tpl.threading == "posix"){
             head << "#include <pthread.h>" << endl;
@@ -372,6 +368,13 @@ void	Generator_C_Header(CTemplate &tpl, ofstream &head){
     } else {
         cerr << "NYI at " << __FILE__ << ":" << __LINE__ << endl;
     }
+
+
+    head << "#ifdef __cplusplus" << endl;
+    head << "extern \"C\" {" << endl;
+    head << "#endif" << endl << endl;
+
+
 
     if(tpl.compiler_type == "gcc"){
         head << "typedef unsigned long long artuint64;" << endl;
@@ -664,8 +667,8 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
                 src << "\treturn;" << endl;
                 src << "}" << endl;
                 src << "art_start_initialized = 1;" << endl;
-                src << "retval = pthread_mutex_unlock(&art_mutex);" << endl;
-                src << "if(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl;
+//                src << "retval = pthread_mutex_unlock(&art_mutex);" << endl;
+//                src << "if(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl;
             } else if("win32" == tpl.threading) {
                 src << "#error NYI! art_mutex not initialized yet" << endl;
             }
@@ -713,6 +716,10 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
 
     src << "art_retval = atexit((void *)art_stop);" << endl;
     src << "if(art_retval == -1){arterrlog(\"atexit()\", __FILE__, __LINE__);exit(-1);}" << endl;
+    
+    src << "retval = pthread_mutex_unlock(&art_mutex);" << endl;
+    src << "if(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl;
+
     src << "}" << endl << endl;
 
     src << "void\tart_stop(void){" << endl;
