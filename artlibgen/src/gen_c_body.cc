@@ -51,10 +51,11 @@ int     Generator_C_USER_Body_Prolog(CTemplate &tpl, CDomain &tmpDom,
                 src << "\tif(0 == art_start_initialized) {" << endl
                     << "\t\tpthread_mutex_unlock(&art_mutex);" << endl
                     << "\t\tart_start(\"autoinitialized by "
-                    << tmpTor.name << "() at __FILE__:__LINE__\"); }"
+                    << tmpTor.name << "() at __FILE__:__LINE__\"); "
+                    << "\t\tretval = pthread_mutex_lock(&art_mutex);" << endl
+                    << "\t\tif(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl   
+                    << "\t}" << endl
                     << endl << endl;
-                src << "\tretval = pthread_mutex_lock(&art_mutex);" << endl;
-                src << "\tif(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl;
             }
         }
         else if(tpl.threading == "win32"){
