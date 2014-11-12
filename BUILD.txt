@@ -3,7 +3,7 @@ One can build ART with few options:
 1. with GNU Make
 Pros: it's GNU Make
 Cons: current Makefiles doesn't contain depend-targets, so you can build
-from scratch with it, but you change source, you have to make clean and then
+from scratch with it, but if you change source, you have to make clean and then
 make again.
 
 2. with SCons

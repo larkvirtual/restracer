@@ -57,6 +57,7 @@ void CFileLineFetcher::peekLine(string &str) {
 #include <sys/socket.h>
 #include <netdb.h>      /* struct sockaddr_in */
 #include <netinet/tcp.h> /* TCP_NODELAY */
+#include <unistd.h>     /* close() */
 
 /* No more receptions. */
 #define LTN_SHUT_RD (int)0
