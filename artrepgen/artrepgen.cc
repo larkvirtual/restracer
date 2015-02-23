@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
         catch(const char *msg)
         {
             cerr << "Received exception: \"" << msg <<"\"\nIncorrect input file\n" 
-            << "Perhaps the program is stopped incorrectly";
+            << "Perhaps the program is stopped incorrectly.\n";
         }
 
         return ret_val;
