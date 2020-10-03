@@ -1,6 +1,7 @@
 ARTROOT=../..
 ARTLIBGEN=$ARTROOT/artlibgen/src/artlibgen
 ARTREPGEN=$ARTROOT/artrepgen/artrepgen
+CCFLAGS="-W -Wall -Wextra -ansi"
 
 rm -f art.* [0-9][0-9][0-9].c.out
 
@@ -24,7 +25,7 @@ total=0
 
 for i in `ls [0-9][0-9][0-9].c`; do
 #    set -x
-    gcc -W -Wall -Wextra -ansi -g -ggdb -include art.h $i art.o -o $i.out
+    gcc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
     ./$i.out
     $ARTREPGEN --file tracefile.out > tmp
 #    exit
@@ -60,8 +61,8 @@ $ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.
 gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
 
 for i in `ls f[0-9][0-9].c`; do
-    gcc -W -Wall -Wextra -ansi -g f04-api.c -c
-    gcc -W -Wall -Wextra -ansi -g -include art.h $i art.o f04-api.o -o $i.out -I.
+    gcc ${CCFLAGS} -g f04-api.c -c
+    gcc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
     ./$i.out
     $ARTREPGEN --file tracefile.out > tmp
     sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
