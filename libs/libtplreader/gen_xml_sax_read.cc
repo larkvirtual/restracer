@@ -225,7 +225,7 @@ int stringLoader(vector <string> &strings, chunkGetter &getter) {
 
         return 0;
     }
-    else if(onElementEnd) {
+    else if(onElementEnd == chunk.event) {
         // А тут нет значения, ничего не делаем вообще
         return 0;
     }
