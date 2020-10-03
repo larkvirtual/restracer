@@ -5,7 +5,7 @@ tracefile-method:
 
 networked-method: build-n-run-networked.sh usleep
 	@echo "*******************************************************************"
-	@echo "* Now I will run network connection testing for client and server."
+	@echo "* Now will be started network connection testing for client and server."
 	@echo "* At the end you have to see the same number of passed test as for"
 	@echo "* tracing via tracefile. Else (on slow machine) tune"
 	@echo "* argument for ./usleep in build-n-run-networked.sh script."
