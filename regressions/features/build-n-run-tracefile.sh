@@ -1,7 +1,8 @@
 ARTROOT=../..
 ARTLIBGEN=$ARTROOT/artlibgen/src/artlibgen
 ARTREPGEN=$ARTROOT/artrepgen/artrepgen
-CCFLAGS="-W -Wall -Wextra -ansi"
+#CCFLAGS="-W -Wall -Wextra -ansi"
+CCFLAGS=""
 
 rm -f art.* [0-9][0-9][0-9].c.out
 
