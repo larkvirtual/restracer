@@ -11,8 +11,8 @@ def CheckPKG(context, name):
     return ret
 
 # class Options is for Nexenta/Hardy. scons from Hardy is outdated.
-opts = Options('custom.py')
-#opts = Variables('custom.py')
+#opts = Options('custom.py')
+opts = Variables('custom.py')
 
 #opts.Add('OS', 'Set to current OS: linux, freebsd, nexenta.', 0)
 opts.Add('PROFILE', 'Set to 1 to build profiled version', 0)
