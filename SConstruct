@@ -53,6 +53,9 @@ ART_DEBUG_INSERT_DEVEL_COMMENT = \
    ARGUMENTS.get('ART_DEBUG_INSERT_DEVEL_COMMENT', 0)
 #
 
+# -Wno-deprecated-declarations to prevent libxml++-2.6 warnings
+env.Append(CCFLAGS = '-Wno-deprecated-declarations')
+
 if int(PROFILE):
     env.Append(CCFLAGS = '-pg')
     env.Append(LINKFLAGS = '-pg')

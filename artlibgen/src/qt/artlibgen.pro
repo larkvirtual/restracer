@@ -22,5 +22,7 @@ INCLUDEPATH = ../../../libs/libtplreader ../../../libs/liblinefetch
 
 QT =
 
+QMAKE_CXXFLAGS += -Wno-deprecated-declarations
+# prevent libxml++-2.6 warnings
 CONFIG += link_pkgconfig
 PKGCONFIG += libxml++-2.6
