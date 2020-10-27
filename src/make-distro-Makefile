@@ -1,0 +1,23 @@
+.PHONY: clean
+
+ARTLIBGEN=./artlibgen
+ARTREPGEN=./artrepgen
+
+000.report: 000.trace
+	$(ARTREPGEN) --file 000.trace > 000.report
+
+000.trace: 000
+	./000
+	mv tracefile.out 000.trace
+
+000: 000.c art.o
+	gcc -include art.h art.o 000.c -o 000
+
+art.o: art.c art.h
+	gcc -c art.c -Wno-pointer-to-int-cast -g
+
+art.c:
+	$(ARTLIBGEN) posix-gcc-mt-file-lint.xml art.h art.c
+
+clean:
+	rm -f art.[cho] [0-9][0-9][0-9] [0-9][0-9][0-9].[a-z][a-z]* err.log tracefile.out
