@@ -13,33 +13,33 @@ release:
 	CFLAGS="-Wno-deprecated-declarations -O3 -fomit-frame-pointer" $(MAKE) all
 
 all:
-	$(MAKE) -C libs
-	$(MAKE) -C artlibgen/src
-	$(MAKE) -C artrepgen
-	$(MAKE) -C artlibgen/templates
-	$(MAKE) -C utils
+	$(MAKE) -C src/libs
+	$(MAKE) -C src/artlibgen/src
+	$(MAKE) -C src/artrepgen
+	$(MAKE) -C src/artlibgen/templates
+	$(MAKE) -C src/utils
 
 test: all
-	$(MAKE) -C artlibgen/templates
+	$(MAKE) -C src/artlibgen/templates
 	$(MAKE) -C regressions/features
 
 clean:
-	$(MAKE) -C libs clean
-	$(MAKE) -C artlibgen/src clean
-	$(MAKE) -C artrepgen clean
+	$(MAKE) -C src/libs clean
+	$(MAKE) -C src/artlibgen/src clean
+	$(MAKE) -C src/artrepgen clean
 	$(MAKE) -C regressions/features clean
-	$(MAKE) -C artlibgen/templates clean
-	$(MAKE) -C utils clean
+	$(MAKE) -C src/artlibgen/templates clean
+	$(MAKE) -C src/utils clean
 	rm -f art.[cho] art_fork.[cho]
 
 install: all
-	artlibgen/src/artlibgen artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c
-	artlibgen/src/artlibgen artlibgen/templates/posix-gcc-mt-file-fork.xml art_fork.h art_fork.c
+	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c
+	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-fork.xml art_fork.h art_fork.c
 	$(CC) -c art.c art_fork.c -g -ggdb -Wno-pointer-to-int-cast
 	cp art.h art_fork.h $(DESTDIR)/include
 	mkdir -p $(DESTDIR)/lib/art
 	cp art.o art_fork.o $(DESTDIR)/lib/art
-	cp artlibgen/src/artlibgen artrepgen/artrepgen utils/art* $(DESTDIR)/bin
+	cp src/artlibgen/src/artlibgen src/artrepgen/artrepgen src/utils/art* $(DESTDIR)/bin
 
 deinstall: uninstall
 

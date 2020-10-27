@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/sh -e
 
 if [ $# -eq 0 ]; then echo "Usage: $0 tag"; exit 0; fi
 
@@ -16,15 +16,15 @@ esac
 art_dir=art-$1-$OS-`uname -m`
 art_dir=`echo $art_dir | sed 's/i[3-6]86/x86/g'`
 art_dir=`echo $art_dir | sed 's/mips64/mipsel/g'`
-scons -Q -j4 OS=$OS STATIC=0 RELEASE=1 && mkdir $art_dir
+cd src && scons -Q -j4 OS=$OS STATIC=0 RELEASE=1 && cd .. && mkdir $art_dir
 
 if [ ! $? -eq 0 ]; then echo "Build failure." exit 1; fi
 
-cp artlibgen/src/artlibgen $art_dir &&
-cp artrepgen/artrepgen $art_dir &&
+cp src/artlibgen/src/artlibgen $art_dir &&
+cp src/artrepgen/artrepgen $art_dir &&
 strip $art_dir/* &&
-cp artlibgen/templates/posix-gcc-mt-file-lint.xml $art_dir &&
-cp make-distro-Makefile $art_dir/Makefile &&
+cp src/artlibgen/templates/posix-gcc-mt-file-lint.xml $art_dir &&
+cp src/make-distro-Makefile $art_dir/Makefile &&
 cp regressions/features/003.c $art_dir/000.c &&
 tar cf $art_dir.tar $art_dir &&
 cp $art_dir.tar $art_dir.tar- &&
