@@ -32,7 +32,6 @@ int main(int argc, char **argv) {
         fetcher = new CFileLineFetcher;
         fetcher->attach(argv[2]); // FIXME: проверить возвращаемое значение
 
-
         bool ret_val = false;
         try
         {
@@ -44,7 +43,9 @@ int main(int argc, char **argv) {
             << "Perhaps the program is stopped incorrectly.\n";
         }
 
-        return ret_val;
+        // convert internal trace() retval into proper values
+        if(ret_val) return 0;
+        else        return -1;
     }
     else if(3 == argc && (0 == strcmp(argv[1], "--sock"))) {
         int listenSocket = ltn_CreateListen_s(atoi(argv[2]));
@@ -64,7 +65,11 @@ int main(int argc, char **argv) {
         fetcher = new CSockLineFetcher();
         fetcher->attach(connectedSocket);
 
-        return trace(fetcher);
+        bool ret_val = trace(fetcher);
+
+        // convert internal trace() retval into proper values
+        if(ret_val) return 0;
+        else        return -1;
     }
     else usageexample(argv[0]);
 

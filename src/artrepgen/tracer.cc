@@ -830,6 +830,8 @@ bool postTransactionAnalyzer(traceInfo &ti) {
     return true;
 }
 
+// retval true  - error
+// retval false - ok
 bool trace(CVLineFetcher *fetcher) {
     traceInfo ti;
     bool retval;
