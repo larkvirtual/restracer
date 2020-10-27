@@ -1,10 +1,10 @@
-[ ] art_trace(): убрать аргумент n?
+[ ] art_trace(): remove argument n?
 
-[ ] в протокол писать file:line, а не file
+[ ] write into trace "file:line", not "file
 line
-.
+."
 
-[ ] добавить запись имени (alloca?) Tor'а, чтобы в последствии указать его.
+[ ] add Tor (alloca?) name writing for further mention
 
 [ ] rss: security, announce
 [ ] maillist: security, announce, devel, user
