@@ -26,6 +26,6 @@ test:
   tags:
     - docker
   before_script:
-    - apt update && apt -y libxml++2.6-dev
+    - apt update && apt -y install libxml++2.6-dev
   script:
     - make test
