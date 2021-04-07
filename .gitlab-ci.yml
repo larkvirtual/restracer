@@ -22,7 +22,7 @@ build:
 
 # run tests using the binary built before
 test-file:
-  stage: test-file
+  stage: test
   tags:
     - docker
 #  before_script:
@@ -32,7 +32,7 @@ test-file:
 
 # run tests using the binary built before
 test-networked:
-  stage: test-networked
+  stage: test
   tags:
     - docker
 #  before_script:
