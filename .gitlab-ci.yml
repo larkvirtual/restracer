@@ -10,7 +10,7 @@ build:
   before_script:
     - apt update && apt -y install scons make libxml++2.6-dev g++
   script:
-    - cd src && scons RELEASE=1 -j$(nproc)
+    - cd src && echo "Using '$(nproc)' processes to build source..."; scons RELEASE=1 -j$(nproc)
   artifacts:
     paths:
       - src/artrepgen/artrepgen
