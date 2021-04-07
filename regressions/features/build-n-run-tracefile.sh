@@ -1,3 +1,5 @@
+#!/bin/sh -ex
+
 ARTROOT=../..
 ARTLIBGEN=$ARTROOT/src/artlibgen/src/artlibgen
 ARTREPGEN=$ARTROOT/src/artrepgen/artrepgen
