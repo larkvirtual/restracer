@@ -1,6 +1,6 @@
---- build-n-run-networked.sh	2012-05-04 18:15:03.594327687 +0700
-+++ build-n-run.sh-netw-patch	2012-05-04 18:06:25.000000000 +0700
-@@ -14,7 +14,7 @@
+--- build-n-run-networked.sh	2021-04-07 16:02:35.566094506 +0700
++++ build-n-run.sh-netw-patch	2021-04-07 16:05:28.001047577 +0700
+@@ -16,7 +16,7 @@
      exit -1
  fi
  
@@ -9,7 +9,7 @@
  gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
  
  passOK=0
-@@ -22,13 +22,19 @@
+@@ -24,13 +24,21 @@
  FAILEDlist=""
  total=0
  
@@ -17,12 +17,12 @@
 +
  for i in `ls [0-9][0-9][0-9].c`; do
  #    set -x
-     gcc -W -Wall -Wextra -ansi -g -ggdb -include art.h $i art.o -o $i.out
+     gcc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
 +    $ARTREPGEN --sock 12345 > tmp &
 +    ./usleep 2
      ./$i.out
--    $ARTREPGEN --file tracefile.out > tmp
--#    exit
+     $ARTREPGEN --file tracefile.out > tmp
+ #    exit
 +    ./usleep 2
 +    killall -9 artrepgen
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
@@ -31,7 +31,7 @@
      rm -f tmp
      diff -u $i.artrep.real $i.artrep.right
      if test $? -eq 0; then
-@@ -56,14 +62,17 @@
+@@ -58,14 +66,18 @@
  # А теперь для особых случаев
  
  rm -f art.[cho]
@@ -40,12 +40,12 @@
  gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
  
  for i in `ls f[0-9][0-9].c`; do
-     gcc -W -Wall -Wextra -ansi -g f04-api.c -c
-     gcc -W -Wall -Wextra -ansi -g -include art.h $i art.o f04-api.o -o $i.out -I.
+     gcc ${CCFLAGS} -g f04-api.c -c
+     gcc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
 +    $ARTREPGEN --sock 12345 > tmp &
 +    ./usleep 2
      ./$i.out
--    $ARTREPGEN --file tracefile.out > tmp
+     $ARTREPGEN --file tracefile.out > tmp
 +    ./usleep 2
 +    killall -9 artrepgen
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
