@@ -10,15 +10,15 @@ build:
   before_script:
     - apt update && apt -y install scons make libxml++2.6-dev g++
   script:
-    - cd src && echo "Using '$(nproc)' processes to build source..."; scons RELEASE=1 -j$(nproc)
+    - cd src && echo "Using '$(nproc)' processes to build source..."; scons RELEASE=1 -Q -j$(nproc)
   artifacts:
     paths:
       - src/artrepgen/artrepgen
       - src/artlibgen/src/artlibgen
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
-#      cache:
-#        paths:
-#          - "*.o"
+  cache:
+    paths:
+      - "*.o"
 
 # run tests using the binary built before
 test-file:
