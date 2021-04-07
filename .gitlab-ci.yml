@@ -5,6 +5,8 @@ image: gcc
 
 build:
   stage: build
+  tags:
+    - docker
   before_script:
     - apt update && apt -y install scons make
   script:
