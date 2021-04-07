@@ -58,7 +58,7 @@ done
 # А теперь для особых случаев
 
 rm -f art.[cho]
-$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
+$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
 gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
 
 for i in `ls f[0-9][0-9].c`; do
