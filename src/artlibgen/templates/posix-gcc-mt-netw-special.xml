@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<template
+  __format__="1"
+  name="POSIX/gcc multithreaded networked SPECIAL"
+  prefix="art_"
+  errlogmode="tracefile.err"
+  trap_on_io_err="true"
+  remote_mode="true"
+  force_flush="true"
+  fork_enabled="false"
+  multithreaded="true"
+  art_start_selfinit="true"
+  threading="posix"
+  compiler_type="gcc"
+  trace_target="localhost:12345">
+  <domain
+    name="neverland"
+    float_handle="false"
+    handle="int"
+    includesGlobal="false"
+    >
+
+    <!-- bad_handle -->
+    <expr
+      oper="=="
+      type="int"
+      value="-1"
+    />
+    <includes>f04-api.h</includes>
+    <tor
+      __type__="allocator"
+      name="brokenAllocator"
+      float_arg_n1="0"
+      float_arg_n2="0"
+      is_handle_arg_out="true"
+      handle_arg_out="0"
+      cpp_alias=""
+    >
+    <validateDom_before></validateDom_before>
+    <args
+      type="int"
+      name=""
+    />
+    <args
+      type="char*"
+      name="zzz"
+    />
+
+    <!-- badRetCode -->
+    <expr
+      oper="=="
+      type="int"
+      value="-1"
+    />
+    </tor>
+    
+    <tor
+      __type__="deallocator"
+      name="someDeallocator"
+      float_arg_n1="0"
+      float_arg_n2="0"
+      is_handle_arg_out="false"
+      handle_arg_out=""
+      cpp_alias=""
+      >
+      <validateDom_before>-</validateDom_before>
+      <validateDom_before>neverland</validateDom_before>
+      <args
+        type="void"
+        name=""
+        />
+      <args
+        type="int"
+        name="z"
+        />
+      <!-- badRetCode -->
+      <expr
+        oper=""
+        type="void"
+        value=""
+        />
+    </tor>
+  </domain>
+</template>
