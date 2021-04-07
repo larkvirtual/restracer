@@ -18,9 +18,6 @@ if [ ! -f $ARTREPGEN ]; then
     exit -1
 fi
 
-# debug
-find ../..
-
 $ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
 gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
 
