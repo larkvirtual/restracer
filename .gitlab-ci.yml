@@ -25,8 +25,8 @@ test-file:
   stage: test
   tags:
     - docker
-#  before_script:
-#    - apt update && apt -y install libxml++2.6-dev
+  before_script:
+    - apt update && apt -y install libxml++2.6-2v5
   script:
     - cd regressions/features && make tracefile-method
 
@@ -35,7 +35,7 @@ test-networked:
   stage: test
   tags:
     - docker
-#  before_script:
-#    - apt update && apt -y install libxml++2.6-dev
+  before_script:
+    - apt update && apt -y install libxml++2.6-2v5
   script:
     - cd regressions/features && make networked-method
