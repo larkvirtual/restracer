@@ -10,7 +10,7 @@ build:
   before_script:
     - apt update && apt -y install scons make
   script:
-    - scons RELEASE=1 -j4
+    - cd src && scons RELEASE=1 -j4
 #  artifacts:
 #    paths:
 #      - mybinary
