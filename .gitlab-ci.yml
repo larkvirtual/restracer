@@ -10,7 +10,7 @@ build:
   before_script:
     - apt update && apt -y install scons make libxml++2.6-dev
   script:
-    - cd src && scons RELEASE=1 -j4
+    - cd src && scons RELEASE=1 -j$(nproc)
   artifacts:
     paths:
       - src/artrepgen/artrepgen
@@ -21,11 +21,21 @@ build:
 #          - "*.o"
 
 # run tests using the binary built before
-test:
-  stage: test
+test-file:
+  stage: test-file
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install libxml++2.6-dev
+#  before_script:
+#    - apt update && apt -y install libxml++2.6-dev
   script:
-    - make test
+    - cd regressions/features && make tracefile-method
+
+# run tests using the binary built before
+test-networked:
+  stage: test-networked
+  tags:
+    - docker
+#  before_script:
+#    - apt update && apt -y install libxml++2.6-dev
+  script:
+    - cd regressions/features && make networked-method
