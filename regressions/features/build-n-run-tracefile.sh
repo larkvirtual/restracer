@@ -1,6 +1,6 @@
 ARTROOT=../..
-ARTLIBGEN=$ARTROOT/artlibgen/src/artlibgen
-ARTREPGEN=$ARTROOT/artrepgen/artrepgen
+ARTLIBGEN=$ARTROOT/src/artlibgen/src/artlibgen
+ARTREPGEN=$ARTROOT/src/artrepgen/artrepgen
 #CCFLAGS="-W -Wall -Wextra -ansi"
 CCFLAGS=""
 
@@ -16,7 +16,7 @@ if [ ! -f $ARTREPGEN ]; then
     exit -1
 fi
 
-$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
+$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
 gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
 
 passOK=0
