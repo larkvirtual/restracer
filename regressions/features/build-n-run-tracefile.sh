@@ -92,4 +92,7 @@ echo '*************************************************************************'
 echo "-------------------------------------"
 echo "TOTAL PASSED: $passOK/$total"
 echo "TOTAL FAILED: $passFAILED"
-if [ "$FAILEDlist" != "" ]; then echo "FAILED list: $FAILEDlist"; fi
+if [ "$FAILEDlist" != "" ]; then
+    echo "FAILED list: $FAILEDlist"
+    exit 1
+fi
