@@ -12,7 +12,7 @@
  
 +if ! [ -z "$CI_JOB_ID" ]; then
 +    # We are inside GitLab CI, setting other variables
-+    repGenStartupTime=3
++    repGenStartupTime=4
 +    repGenShutdownTime=5
 +else
 +    # Generic run on developer machine
