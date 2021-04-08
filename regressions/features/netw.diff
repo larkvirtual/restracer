@@ -1,6 +1,20 @@
---- build-n-run-networked.sh	2021-04-07 16:02:35.566094506 +0700
-+++ build-n-run.sh-netw-patch	2021-04-07 16:05:28.001047577 +0700
-@@ -16,7 +16,7 @@
+--- build-n-run-networked.sh	2021-04-08 17:43:12.776495774 +0700
++++ build-n-run.sh-netw-patch	2021-04-08 17:43:01.400532618 +0700
+@@ -1,10 +1,12 @@
+-#!/bin/sh -ex
++#!/bin/sh
+ 
+ ARTROOT=../..
+ ARTLIBGEN=$ARTROOT/src/artlibgen/src/artlibgen
+ ARTREPGEN=$ARTROOT/src/artrepgen/artrepgen
+ #CCFLAGS="-W -Wall -Wextra -ansi"
+ CCFLAGS=""
++repGenStartupTime=3
++repGenShutdownTime=1
+ 
+ rm -f art.* [0-9][0-9][0-9].c.out
+ 
+@@ -18,7 +20,7 @@
      exit -1
  fi
  
@@ -9,29 +23,31 @@
  gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
  
  passOK=0
-@@ -24,13 +24,21 @@
+@@ -26,13 +28,21 @@
  FAILEDlist=""
  total=0
  
-+killall -9 artrepgen
++killall -9 artrepgen || true
 +
  for i in `ls [0-9][0-9][0-9].c`; do
  #    set -x
      gcc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
+-    ./$i.out
+-    $ARTREPGEN --file tracefile.out > tmp
 +    $ARTREPGEN --sock 12345 > tmp &
-+    ./usleep 2
-     ./$i.out
-     $ARTREPGEN --file tracefile.out > tmp
++    ./usleep $repGenStartupTime
++    ./$i.out || true
++    ./usleep $repGenShutdownTime
++#    cat tmp
  #    exit
-+    ./usleep 2
-+    killall -9 artrepgen
++    killall -9 artrepgen || true
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
 +#    exit
 +    mv tmp tracefile.out
      rm -f tmp
      diff -u $i.artrep.real $i.artrep.right
      if test $? -eq 0; then
-@@ -58,14 +66,18 @@
+@@ -60,14 +70,17 @@
  # А теперь для особых случаев
  
  rm -f art.[cho]
@@ -43,10 +59,10 @@
      gcc ${CCFLAGS} -g f04-api.c -c
      gcc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
 +    $ARTREPGEN --sock 12345 > tmp &
-+    ./usleep 2
++    ./usleep $repGenStartupTime
      ./$i.out
-     $ARTREPGEN --file tracefile.out > tmp
-+    ./usleep 2
+-    $ARTREPGEN --file tracefile.out > tmp
++    ./usleep $repGenShutdownTime
 +    killall -9 artrepgen
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
      rm -f tmp
