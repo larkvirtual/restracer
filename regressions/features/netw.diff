@@ -1,20 +1,31 @@
 --- build-n-run-networked.sh	2021-04-08 17:43:12.776495774 +0700
-+++ build-n-run.sh-netw-patch	2021-04-08 17:43:01.400532618 +0700
-@@ -1,10 +1,12 @@
++++ build-n-run.sh-netw-patch	2021-04-08 17:55:31.901679529 +0700
+@@ -1,4 +1,4 @@
 -#!/bin/sh -ex
 +#!/bin/sh
  
  ARTROOT=../..
  ARTLIBGEN=$ARTROOT/src/artlibgen/src/artlibgen
- ARTREPGEN=$ARTROOT/src/artrepgen/artrepgen
+@@ -6,6 +6,18 @@
  #CCFLAGS="-W -Wall -Wextra -ansi"
  CCFLAGS=""
-+repGenStartupTime=3
-+repGenShutdownTime=1
  
++if [ -z "$CI_JOB_ID" ]; then
++    # We are inside GitLab CI, setting other variables
++    repGenStartupTime=3
++    repGenShutdownTime=2
++else
++    # Generic run on developer machine
++    repGenStartupTime=3
++    repGenShutdownTime=1
++fi
++echo "repGenStartupTime='$repGenStartupTime'"
++echo "repGenShutdownTime='$repGenShutdownTime'"
++
  rm -f art.* [0-9][0-9][0-9].c.out
  
-@@ -18,7 +20,7 @@
+ if [ ! -f $ARTLIBGEN ]; then
+@@ -18,7 +30,7 @@
      exit -1
  fi
  
@@ -23,7 +34,7 @@
  gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
  
  passOK=0
-@@ -26,13 +28,21 @@
+@@ -26,13 +38,21 @@
  FAILEDlist=""
  total=0
  
@@ -47,7 +58,7 @@
      rm -f tmp
      diff -u $i.artrep.real $i.artrep.right
      if test $? -eq 0; then
-@@ -60,14 +70,17 @@
+@@ -60,14 +80,17 @@
  # А теперь для особых случаев
  
  rm -f art.[cho]
