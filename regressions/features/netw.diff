@@ -1,5 +1,5 @@
 --- build-n-run-networked.sh	2021-04-08 17:43:12.776495774 +0700
-+++ build-n-run.sh-netw-patch	2021-04-08 18:03:38.895674223 +0700
++++ build-n-run.sh-netw-patch	2021-04-08 18:07:01.986859583 +0700
 @@ -1,4 +1,4 @@
 -#!/bin/sh -ex
 +#!/bin/sh
@@ -13,7 +13,7 @@
 +if ! [ -z "$CI_JOB_ID" ]; then
 +    # We are inside GitLab CI, setting other variables
 +    repGenStartupTime=6
-+    repGenShutdownTime=4
++    repGenShutdownTime=5
 +else
 +    # Generic run on developer machine
 +    repGenStartupTime=3
