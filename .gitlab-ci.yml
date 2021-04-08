@@ -48,7 +48,7 @@ debian-test-file:
   script:
     - cd regressions/features && make tracefile-method
   dependencies:
-   - build-release
+   - debian-build-release
 
 # run tests using the binary built before
 debian-test-networked:
@@ -59,7 +59,7 @@ debian-test-networked:
   before_script:
     - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
-    - cd src/artlibgen/templates && make # to generate networked templates
+    - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
     - cd regressions/features && make networked-method
   dependencies:
-   - build-release
+   - debian-build-release
