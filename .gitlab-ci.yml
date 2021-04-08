@@ -1,9 +1,10 @@
 # use the official gcc image, based on debian
 # can use verions as well, like gcc:5.2
 # see https://hub.docker.com/_/gcc/
-image: debian
+#image: gcc
 
-build-debug:
+debian-build-debug:
+  image: debian
   stage: build
   tags:
     - docker
@@ -13,7 +14,8 @@ build-debug:
     - echo "Using '$(nproc)' processes to build source..."
     - cd src && scons RELEASE=0 -Q -j$(nproc)
 
-build-release:
+debian-build-release:
+  image: debian
   stage: build
   tags:
     - docker
@@ -36,7 +38,8 @@ build-release:
       - "src/config.log"
 
 # run tests using the binary built before
-test-file:
+debian-test-file:
+  image: debian
   stage: test
   tags:
     - docker
@@ -45,17 +48,18 @@ test-file:
   script:
     - cd regressions/features && make tracefile-method
   dependencies:
-   - build-release
+   - debian-build-release
 
 # run tests using the binary built before
-test-networked:
+debian-test-networked:
+  image: debian
   stage: test
   tags:
     - docker
   before_script:
     - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
-    - cd src/artlibgen/templates && make # to generate networked templates
+    - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
     - cd regressions/features && make networked-method
   dependencies:
-   - build-release
+   - debian-build-release
