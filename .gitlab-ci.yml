@@ -18,7 +18,11 @@ build:
       # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
   cache:
     paths:
-      - "*.o"
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+      - "src/.sconsign.dblite"
+      - "src/config.log"
 
 # run tests using the binary built before
 test-file:
