@@ -1,6 +1,8 @@
+#!/bin/sh -ex
+
 ARTROOT=../..
-ARTLIBGEN=$ARTROOT/artlibgen/src/artlibgen
-ARTREPGEN=$ARTROOT/artrepgen/artrepgen
+ARTLIBGEN=$ARTROOT/src/artlibgen/src/artlibgen
+ARTREPGEN=$ARTROOT/src/artrepgen/artrepgen
 #CCFLAGS="-W -Wall -Wextra -ansi"
 CCFLAGS=""
 
@@ -16,7 +18,7 @@ if [ ! -f $ARTREPGEN ]; then
     exit -1
 fi
 
-$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
+$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
 gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
 
 passOK=0
@@ -58,7 +60,7 @@ done
 # А теперь для особых случаев
 
 rm -f art.[cho]
-$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
+$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
 gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
 
 for i in `ls f[0-9][0-9].c`; do
@@ -90,4 +92,7 @@ echo '*************************************************************************'
 echo "-------------------------------------"
 echo "TOTAL PASSED: $passOK/$total"
 echo "TOTAL FAILED: $passFAILED"
-if [ "$FAILEDlist" != "" ]; then echo "FAILED list: $FAILEDlist"; fi
+if [ "$FAILEDlist" != "" ]; then
+    echo "FAILED list: $FAILEDlist"
+    exit 1
+fi

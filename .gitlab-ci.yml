@@ -1,0 +1,56 @@
+# use the official gcc image, based on debian
+# can use verions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+image: debian
+
+build-debug:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
+  script:
+    - echo "Using '$(nproc)' processes to build source..."
+    - cd src && scons RELEASE=0 -Q -j$(nproc)
+
+build-release:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
+  script:
+    - echo "Using '$(nproc)' processes to build source..."
+    - cd src && scons RELEASE=1 -Q -j$(nproc)
+  artifacts:
+    paths:
+      - src/artrepgen/artrepgen
+      - src/artlibgen/src/artlibgen
+      # depending on your build setup it's most likely a good idea to cache outputs to reduce the build time
+  cache:
+    paths:
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+      - "src/.sconsign.dblite"
+      - "src/config.log"
+
+# run tests using the binary built before
+test-file:
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5
+  script:
+    - cd regressions/features && make tracefile-method
+
+# run tests using the binary built before
+test-networked:
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+  script:
+    - cd regressions/features && make networked-method
