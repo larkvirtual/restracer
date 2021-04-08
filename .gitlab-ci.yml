@@ -3,7 +3,17 @@
 # see https://hub.docker.com/_/gcc/
 image: debian
 
-build:
+build-debug:
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
+  script:
+    - echo "Using '$(nproc)' processes to build source..."
+    - cd src && scons RELEASE=0 -Q -j$(nproc)
+
+build-release:
   stage: build
   tags:
     - docker
