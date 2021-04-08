@@ -1,5 +1,5 @@
 --- build-n-run-networked.sh	2021-04-08 17:43:12.776495774 +0700
-+++ build-n-run.sh-netw-patch	2021-04-08 17:55:31.901679529 +0700
++++ build-n-run.sh-netw-patch	2021-04-08 18:00:01.492557826 +0700
 @@ -1,4 +1,4 @@
 -#!/bin/sh -ex
 +#!/bin/sh
@@ -10,7 +10,7 @@
  #CCFLAGS="-W -Wall -Wextra -ansi"
  CCFLAGS=""
  
-+if [ -z "$CI_JOB_ID" ]; then
++if ! [ -z "$CI_JOB_ID" ]; then
 +    # We are inside GitLab CI, setting other variables
 +    repGenStartupTime=3
 +    repGenShutdownTime=2
