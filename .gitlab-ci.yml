@@ -44,6 +44,8 @@ test-file:
     - apt update && apt -y install gcc make libxml++2.6-2v5
   script:
     - cd regressions/features && make tracefile-method
+  dependencies:
+   - build-release
 
 # run tests using the binary built before
 test-networked:
@@ -55,3 +57,5 @@ test-networked:
   script:
     - cd src/artlibgen/templates && make # to generate networked templates
     - cd regressions/features && make networked-method
+  dependencies:
+   - build-release
