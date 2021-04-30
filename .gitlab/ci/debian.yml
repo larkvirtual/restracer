@@ -8,10 +8,12 @@ debian-build-debug:
   script:
     - echo "Using '$(nproc)' processes to build source..."
     - cd src && scons RELEASE=0 -Q -j$(nproc)
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-build-release:
   image: debian
@@ -34,10 +36,12 @@ debian-build-release:
       - "src/artlibgen/src/*.o"
       - "src/.sconsign.dblite"
       - "src/config.log"
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-test-file:
   image: debian
@@ -50,10 +54,12 @@ debian-test-file:
     - cd regressions/features && make tracefile-method
   dependencies:
     - debian-build-release
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-test-networked:
   image: debian
@@ -67,7 +73,9 @@ debian-test-networked:
     - cd regressions/features && make networked-method
   dependencies:
     - debian-build-release
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true

@@ -29,10 +29,12 @@ freebsd-make-build-release:
       - "src/artrepgen/*.o"
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 freebsd-make-test-file:
   image: freebsd
@@ -45,10 +47,12 @@ freebsd-make-test-file:
     - cd regressions/features && make tracefile-method
   dependencies:
     - freebsd-make-build-release
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 freebsd-make-test-networked:
   image: freebsd
@@ -62,10 +66,12 @@ freebsd-make-test-networked:
     - cd regressions/features && make networked-method
   dependencies:
     - freebsd-make-build-release
-  only:
-    refs:
-      - 0.A
-      - 0.B
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 # Disabled due to libxml++ compilation -Werror
 #freebsd-scons-build-debug:
