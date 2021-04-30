@@ -8,10 +8,10 @@ debian-build-debug:
   script:
     - echo "Using '$(nproc)' processes to build source..."
     - cd src && scons RELEASE=0 -Q -j$(nproc)
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 debian-build-release:
   image: debian
@@ -34,10 +34,10 @@ debian-build-release:
       - "src/artlibgen/src/*.o"
       - "src/.sconsign.dblite"
       - "src/config.log"
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 debian-test-file:
   image: debian
@@ -50,10 +50,10 @@ debian-test-file:
     - cd regressions/features && make tracefile-method
   dependencies:
     - debian-build-release
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 debian-test-networked:
   image: debian
@@ -67,7 +67,7 @@ debian-test-networked:
     - cd regressions/features && make networked-method
   dependencies:
     - debian-build-release
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B

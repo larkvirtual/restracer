@@ -30,10 +30,10 @@ freebsd-make-build-release:
       - "src/artrepgen/*.o"
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 freebsd-make-test-file:
   image: freebsd
@@ -46,10 +46,10 @@ freebsd-make-test-file:
     - cd regressions/features && make tracefile-method
   dependencies:
     - freebsd-make-build-release
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 freebsd-make-test-networked:
   image: freebsd
@@ -63,10 +63,10 @@ freebsd-make-test-networked:
     - cd regressions/features && make networked-method
   dependencies:
     - freebsd-make-build-release
-  when: manual
-  rules:
-    - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
-      when: always
+  only:
+    refs:
+      - 0.A
+      - 0.B
 
 # Disabled due to libxml++ compilation -Werror
 #freebsd-scons-build-debug:
