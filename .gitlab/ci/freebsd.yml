@@ -32,6 +32,8 @@ freebsd-make-build-release:
       - "src/artlibgen/src/*.o"
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - when: manual
 
 freebsd-make-test-file:
   image: freebsd
@@ -47,8 +49,7 @@ freebsd-make-test-file:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
 
 freebsd-make-test-networked:
   image: freebsd
@@ -65,8 +66,7 @@ freebsd-make-test-networked:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
 
 # Disabled due to libxml++ compilation -Werror
 #freebsd-scons-build-debug:

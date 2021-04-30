@@ -11,8 +11,7 @@ debian-build-debug:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
 
 debian-build-release:
   image: debian
@@ -38,8 +37,7 @@ debian-build-release:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
 
 debian-test-file:
   image: debian
@@ -55,8 +53,7 @@ debian-test-file:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
 
 debian-test-networked:
   image: debian
@@ -73,5 +70,4 @@ debian-test-networked:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
       when: always
-    - else:
-      when: manual
+    - when: manual
