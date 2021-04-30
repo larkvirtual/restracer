@@ -15,7 +15,6 @@ freebsd-make-build-release:
   stage: build
   tags:
     - freebsd
-  when: manual
 #  before_script:
 #    - pkg install libxml++ gmake scons-py37
   script:
