@@ -1,0 +1,82 @@
+debian-build-debug:
+  image: debian
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
+  script:
+    - env
+    - echo "Using '$(nproc)' processes to build source..."
+    - scons RELEASE=0 -Q -j$(nproc)
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+debian-build-release:
+  image: debian
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
+  script:
+    - echo "Using '$(nproc)' processes to build source..."
+    - scons RELEASE=1 -Q -j$(nproc)
+  artifacts:
+    paths:
+      - artrepgen/artrepgen
+      - artlibgen/src/artlibgen
+  cache:
+    paths:
+      - "artrepgen/*.o"
+      - "libs/libtplreader/*.o"
+      - "artlibgen/src/*.o"
+      - ".sconsign.dblite"
+      - "config.log"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+debian-test-file:
+  image: debian
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5
+  script:
+    - cd regressions/features && make tracefile-method
+  dependencies:
+    - debian-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+debian-test-networked:
+  image: debian
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+  script:
+    - cd artlibgen/templates && make && cd ../.. # to generate networked templates
+    - cd regressions/features && make networked-method
+  dependencies:
+    - debian-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true

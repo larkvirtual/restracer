@@ -55,8 +55,9 @@ void CFileLineFetcher::peekLine(string &str) {
 //////////////////////////////////////////////////////////////////////////////
 #include <sys/types.h>  /* recv() */
 #include <sys/socket.h>
-#include <netdb.h>      /* struct sockaddr_in */
 #include <netinet/tcp.h> /* TCP_NODELAY */
+#include <netinet/in.h> /* struct sockaddr_in */
+#include <netdb.h>      /* struct sockaddr_in */
 #include <unistd.h>     /* close() */
 
 /* No more receptions. */
@@ -108,7 +109,7 @@ int ltn_CreateListen_s(unsigned short port) {
     ssin.sin_addr.s_addr = INADDR_ANY;/* INADDR_ANY OR INADDR_LOOPBACK... */
     ssin.sin_port = htons (port);
 
-    if (bind (s, (struct sockaddr *) &ssin, sizeof_ssin) < 0) {
+    if (::bind (s, (struct sockaddr *) &ssin, sizeof_ssin) < 0) {
         perror ("bind()");
         /* сокет выделен, но foo() не проканала, но сокет надо закрыть все-же... */
         shutdown (s, LTN_SHUT_RDWR);

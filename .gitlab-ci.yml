@@ -1,0 +1,15 @@
+# use the official gcc image, based on debian
+# can use verions as well, like gcc:5.2
+# see https://hub.docker.com/_/gcc/
+#image: gcc
+
+stages:
+  - build
+  - test
+#  - package
+
+include:
+#  - local: .gitlab/ci/archlinux.yml
+  - local: .gitlab/ci/debian.yml
+  - local: .gitlab/ci/freebsd.yml
+#  - local: .gitlab/ci/gentoo.yml
