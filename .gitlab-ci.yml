@@ -10,6 +10,6 @@ stages:
 
 include:
 #  - local: .gitlab/ci/archlinux.yml
-#  - local: .gitlab/ci/debian.yml
+  - local: .gitlab/ci/debian.yml
   - local: .gitlab/ci/freebsd.yml
 #  - local: .gitlab/ci/gentoo.yml
