@@ -3,6 +3,7 @@ debian-build-debug:
   stage: build
   tags:
     - docker
+  when: manual
   before_script:
     - apt update && apt -y install scons make libxml++2.6-dev g++
   script:
@@ -14,6 +15,7 @@ debian-build-release:
   stage: build
   tags:
     - docker
+  when: manual
   before_script:
     - apt update && apt -y install scons make libxml++2.6-dev g++
   script:

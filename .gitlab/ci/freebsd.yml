@@ -15,6 +15,7 @@ freebsd-make-build-release:
   stage: build
   tags:
     - freebsd
+  when: manual
 #  before_script:
 #    - pkg install libxml++ gmake scons-py37
   script:
@@ -29,8 +30,6 @@ freebsd-make-build-release:
       - "src/artrepgen/*.o"
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
-      - "src/.sconsign.dblite"
-      - "src/config.log"
 
 freebsd-make-test-file:
   image: freebsd
