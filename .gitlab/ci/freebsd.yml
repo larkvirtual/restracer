@@ -46,6 +46,9 @@ freebsd-make-test-file:
    - freebsd-make-build-release
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
 
 freebsd-make-test-networked:
   image: freebsd
@@ -61,6 +64,9 @@ freebsd-make-test-networked:
    - freebsd-make-build-release
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
 
 # Disabled due to libxml++ compilation -Werror
 #freebsd-scons-build-debug:

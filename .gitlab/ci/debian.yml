@@ -10,6 +10,9 @@ debian-build-debug:
     - cd src && scons RELEASE=0 -Q -j$(nproc)
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
 
 debian-build-release:
   image: debian
@@ -34,6 +37,9 @@ debian-build-release:
       - "src/config.log"
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
 
 debian-test-file:
   image: debian
@@ -48,6 +54,9 @@ debian-test-file:
    - debian-build-release
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
 
 debian-test-networked:
   image: debian
@@ -63,3 +72,6 @@ debian-test-networked:
    - debian-build-release
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^0.[A-F]/'
+      when: always
+    - else:
+      when: manual
