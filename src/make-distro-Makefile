@@ -11,10 +11,10 @@ ARTREPGEN=./artrepgen
 	mv tracefile.out 000.trace
 
 000: 000.c art.o
-	gcc -include art.h art.o 000.c -o 000
+	cc -include art.h art.o 000.c -o 000
 
 art.o: art.c art.h
-	gcc -c art.c -Wno-pointer-to-int-cast -g
+	cc -c art.c -Wno-pointer-to-int-cast -g
 
 art.c:
 	$(ARTLIBGEN) posix-gcc-mt-file-lint.xml art.h art.c

@@ -3,6 +3,7 @@ DESTDIR?=/usr/local
 # -Wno-deprecated-declarations prevents libxml++-2.6 warnings
 debug:
 	CFLAGS="-g -ggdb -Wall -Wextra -Werror -ansi -DART_DEBUG_INSERT_DEVEL_COMMENT \
+-std=c++11 \
 -Wno-deprecated-declarations \
 -DART_DEBUG" $(MAKE) all
 #	CFLAGS="-Wall -Wextra -Werror -ansi -pedantic -std=c++0x \
