@@ -1,52 +1,79 @@
---- build-n-run-networked.sh	2012-05-04 18:15:03.594327687 +0700
-+++ build-n-run.sh-netw-patch	2012-05-04 18:06:25.000000000 +0700
-@@ -14,7 +14,7 @@
+--- build-n-run-networked.sh	2021-04-08 17:43:12.776495774 +0700
++++ build-n-run.sh-netw-patch	2021-04-08 18:12:54.925458829 +0700
+@@ -1,4 +1,4 @@
+-#!/bin/sh -ex
++#!/bin/sh
+ 
+ ARTROOT=../..
+ ARTLIBGEN=$ARTROOT/artlibgen/src/artlibgen
+@@ -6,6 +6,18 @@
+ #CCFLAGS="-W -Wall -Wextra -ansi"
+ CCFLAGS=""
+ 
++if ! [ -z "$CI_JOB_ID" ]; then
++    # We are inside GitLab CI, setting other variables
++    repGenStartupTime=16
++    repGenShutdownTime=16
++else
++    # Generic run on developer machine
++    repGenStartupTime=3
++    repGenShutdownTime=1
++fi
++echo "repGenStartupTime='$repGenStartupTime'"
++echo "repGenShutdownTime='$repGenShutdownTime'"
++
+ rm -f art.* [0-9][0-9][0-9].c.out
+ 
+ if [ ! -f $ARTLIBGEN ]; then
+@@ -18,7 +30,7 @@
      exit -1
  fi
  
 -$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
 +$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-netw-lint.xml art.h art.c &&
- gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
+ cc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
  
  passOK=0
-@@ -22,13 +22,19 @@
+@@ -26,13 +38,21 @@
  FAILEDlist=""
  total=0
  
-+killall -9 artrepgen
++killall -9 artrepgen || true
 +
  for i in `ls [0-9][0-9][0-9].c`; do
  #    set -x
-     gcc -W -Wall -Wextra -ansi -g -ggdb -include art.h $i art.o -o $i.out
-+    $ARTREPGEN --sock 12345 > tmp &
-+    ./usleep 2
-     ./$i.out
+     cc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
+-    ./$i.out
 -    $ARTREPGEN --file tracefile.out > tmp
--#    exit
-+    ./usleep 2
-+    killall -9 artrepgen
++    $ARTREPGEN --sock 12345 > tmp &
++    ./usleep $repGenStartupTime
++    ./$i.out || true
++    ./usleep $repGenShutdownTime
++#    cat tmp
+ #    exit
++    killall -9 artrepgen || true
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
 +#    exit
 +    mv tmp tracefile.out
      rm -f tmp
      diff -u $i.artrep.real $i.artrep.right
      if test $? -eq 0; then
-@@ -56,14 +62,17 @@
+@@ -60,14 +80,17 @@
  # А теперь для особых случаев
  
  rm -f art.[cho]
 -$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
 +$ARTLIBGEN $ARTROOT/artlibgen/templates/posix-gcc-mt-netw-special.xml art.h art.c &&
- gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
+ cc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
  
  for i in `ls f[0-9][0-9].c`; do
-     gcc -W -Wall -Wextra -ansi -g f04-api.c -c
-     gcc -W -Wall -Wextra -ansi -g -include art.h $i art.o f04-api.o -o $i.out -I.
+     cc ${CCFLAGS} -g f04-api.c -c
+     cc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
 +    $ARTREPGEN --sock 12345 > tmp &
-+    ./usleep 2
++    ./usleep $repGenStartupTime
      ./$i.out
 -    $ARTREPGEN --file tracefile.out > tmp
-+    ./usleep 2
++    ./usleep $repGenShutdownTime
 +    killall -9 artrepgen
      sed -r 's/[0-9A-Z]{16}//g' tmp > $i.artrep.real
      rm -f tmp

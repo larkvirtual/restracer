@@ -1,0 +1,133 @@
+# Disabled due to libxml++ compilation -Werror
+#freebsd-make-build-debug:
+#  image: freebsd
+#  stage: build
+#  tags:
+#    - freebsd
+##  before_script:
+##    - pkg install libxml++ gmake scons-py37
+#  script:
+#    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
+#    - gmake debug -j$(sysctl hw.ncpu | awk '{print $2}')
+
+freebsd-make-build-release:
+  image: freebsd
+  stage: build
+  tags:
+    - freebsd
+#  before_script:
+#    - pkg install libxml++ gmake scons-py37
+  script:
+    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
+    - gmake release -j$(sysctl hw.ncpu | awk '{print $2}')
+  artifacts:
+    paths:
+      - artrepgen/artrepgen
+      - artlibgen/src/artlibgen
+  cache:
+    paths:
+      - "artrepgen/*.o"
+      - "libs/libtplreader/*.o"
+      - "artlibgen/src/*.o"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+freebsd-make-test-file:
+  image: freebsd
+  stage: test
+  tags:
+    - freebsd
+#  before_script:
+#    - apt update && apt -y install gcc make libxml++2.6-2v5
+  script:
+    - cd regressions/features && make tracefile-method
+  dependencies:
+    - freebsd-make-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+freebsd-make-test-networked:
+  image: freebsd
+  stage: test
+  tags:
+    - freebsd
+#  before_script:
+#    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+  script:
+    - cd artlibgen/templates && make && cd ../.. # to generate networked templates
+    - cd regressions/features && make networked-method
+  dependencies:
+    - freebsd-make-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+# Disabled due to libxml++ compilation -Werror
+#freebsd-scons-build-debug:
+#  image: freebsd
+#  stage: build
+#  tags:
+#    - freebsd
+##  before_script:
+##    - pkg install libxml++ gmake scons-py37
+#  script:
+#    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
+#    - cd src && scons RELEASE=0 -Q -j$(sysctl hw.ncpu | awk '{print $2}')
+
+#freebsd-scons-build-release:
+#  image: freebsd
+#  stage: build
+#  tags:
+#    - freebsd
+##  before_script:
+##    - sudo pkg install libxml++ scons-py37 pkgconf
+#  script:
+#    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
+#    - cd src && scons RELEASE=1 -Q -j$(sysctl hw.ncpu | awk '{print $2}')
+#  artifacts:
+#    paths:
+#      - src/artrepgen/artrepgen
+#      - src/artlibgen/src/artlibgen
+#  cache:
+#    paths:
+#      - "src/artrepgen/*.o"
+#      - "src/libs/libtplreader/*.o"
+#      - "src/artlibgen/src/*.o"
+#      - "src/.sconsign.dblite"
+#      - "src/config.log"
+
+#freebsd-scons-test-file:
+#  image: freebsd
+#  stage: test
+#  tags:
+#    - freebsd
+##  before_script:
+##    - apt update && apt -y install gcc make libxml++2.6-2v5
+#  script:
+#    - cd regressions/features && make tracefile-method
+#  dependencies:
+#   - freebsd-scons-build-release
+#
+#freebsd-scons-test-networked:
+#  image: freebsd
+#  stage: test
+#  tags:
+#    - freebsd
+##  before_script:
+##    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+#  script:
+#    - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
+#    - cd regressions/features && make networked-method
+#  dependencies:
+#   - freebsd-scons-build-release
