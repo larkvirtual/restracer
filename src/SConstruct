@@ -82,6 +82,7 @@ else:
     env.Append(CCFLAGS = '-Wextra')
     env.Append(CCFLAGS = '-Werror')
     env.Append(CCFLAGS = '-O0')
+    env.Append(CCFLAGS = '-std=c++11')
     env.Append(CCFLAGS = '-DART_DEBUG')
 # no -pedantic, as long long is used, but it doesn't exist in ISO C++ 1998
 

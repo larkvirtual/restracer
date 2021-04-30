@@ -12,8 +12,8 @@
  
 +if ! [ -z "$CI_JOB_ID" ]; then
 +    # We are inside GitLab CI, setting other variables
-+    repGenStartupTime=4
-+    repGenShutdownTime=5
++    repGenStartupTime=7
++    repGenShutdownTime=7
 +else
 +    # Generic run on developer machine
 +    repGenStartupTime=3
@@ -31,7 +31,7 @@
  
 -$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c &&
 +$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-netw-lint.xml art.h art.c &&
- gcc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
+ cc -c art.c -o art.o -g -ggdb -Wno-pointer-to-int-cast
  
  passOK=0
 @@ -26,13 +38,21 @@
@@ -42,7 +42,7 @@
 +
  for i in `ls [0-9][0-9][0-9].c`; do
  #    set -x
-     gcc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
+     cc ${CCFLAGS} -g -ggdb -include art.h $i art.o -o $i.out
 -    ./$i.out
 -    $ARTREPGEN --file tracefile.out > tmp
 +    $ARTREPGEN --sock 12345 > tmp &
@@ -64,11 +64,11 @@
  rm -f art.[cho]
 -$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-file-special.xml art.h art.c &&
 +$ARTLIBGEN $ARTROOT/src/artlibgen/templates/posix-gcc-mt-netw-special.xml art.h art.c &&
- gcc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
+ cc -c art.c -o art.o -g -Wno-pointer-to-int-cast &&
  
  for i in `ls f[0-9][0-9].c`; do
-     gcc ${CCFLAGS} -g f04-api.c -c
-     gcc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
+     cc ${CCFLAGS} -g f04-api.c -c
+     cc ${CCFLAGS} -g -include art.h $i art.o f04-api.o -o $i.out -I.
 +    $ARTREPGEN --sock 12345 > tmp &
 +    ./usleep $repGenStartupTime
      ./$i.out

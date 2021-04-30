@@ -1,0 +1,58 @@
+#INCOMPLETE
+arch-build-debug:
+ image: archlinux
+ stage: build
+ tags:
+   - docker
+ before_script:
+   - pacman -S libxml++
+ script:
+   - echo "Using '$(nproc)' processes to build source..."
+   - cd src && scons RELEASE=0 -Q -j$(nproc)
+
+arch-build-release:
+  image: archlinux
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - pacman -S libxml++
+  script:
+    - echo "Using '$(nproc)' processes to build source..."
+    - cd src && scons RELEASE=1 -Q -j$(nproc)
+  artifacts:
+    paths:
+      - src/artrepgen/artrepgen
+      - src/artlibgen/src/artlibgen
+  cache:
+    paths:
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+      - "src/.sconsign.dblite"
+      - "src/config.log"
+
+arch-test-file:
+  image: arch
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5
+  script:
+    - cd regressions/features && make tracefile-method
+  dependencies:
+   - arch-build-release
+
+arch-test-networked:
+  image: arch
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+  script:
+    - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
+    - cd regressions/features && make networked-method
+  dependencies:
+   - arch-build-release
