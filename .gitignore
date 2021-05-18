@@ -1,0 +1,17 @@
+*.[oa]
+src/artlibgen/src/artlibgen
+src/artrepgen/artrepgen
+src/artlibgen/templates/posix-gcc-mt-file-fork/
+src/artlibgen/templates/posix-gcc-mt-file-lint/
+src/artlibgen/templates/posix-gcc-mt-file-special/
+src/artlibgen/templates/posix-gcc-mt-netw-lint/
+src/artlibgen/templates/posix-gcc-mt-netw-special/
+#src/artrepgen/qt/artrepgen.pro.user
+#src/artrepgen/qt/Makefile
+#src/artrepgen/build-artrepgen-Desktop-Debug/
+src/artlibgen/templates/posix-gcc-mt-file-fork.xml
+src/artlibgen/templates/posix-gcc-mt-netw-lint.xml
+src/artlibgen/templates/posix-gcc-mt-netw-special.xml
+regressions/features/*/template.tmp
+regressions/features/*/.tracefile.out
+regressions/features/*/main

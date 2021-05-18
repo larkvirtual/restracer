@@ -7,8 +7,9 @@
 ##  before_script:
 ##    - pkg install libxml++ gmake scons-py37
 #  script:
-#    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
-#    - gmake debug -j$(sysctl hw.ncpu | awk '{print $2}')
+#    - NPROC=$(sysctl hw.ncpu | awk '{print $2}')
+#    - echo "Using '$NPROC' processes to build source..."
+#    - gmake debug -j$NPROC
 
 freebsd-make-build-release:
   image: freebsd
@@ -16,14 +17,16 @@ freebsd-make-build-release:
   tags:
     - freebsd
 #  before_script:
-#    - pkg install libxml++ gmake scons-py37
+#    - pkg install libxml++ gmake
   script:
-    - echo "Using '$(sysctl hw.ncpu | awk '{print $2}')' processes to build source..."
-    - gmake release -j$(sysctl hw.ncpu | awk '{print $2}')
+    - NPROC=$(sysctl hw.ncpu | awk '{print $2}')
+    - echo "Using '$NPROC' processes to build source..."
+    - gmake release -j$NPROC
   artifacts:
     paths:
-      - src/artrepgen/artrepgen
       - src/artlibgen/src/artlibgen
+      - src/artrepgen/artrepgen
+      - src/artlibgen/templates/
   cache:
     paths:
       - "src/artrepgen/*.o"
@@ -44,6 +47,8 @@ freebsd-make-test-file:
 #  before_script:
 #    - apt update && apt -y install gcc make libxml++2.6-2v5
   script:
+    - sudo gmake uninstall
+    - sudo gmake install
     - cd regressions/features && make tracefile-method
   dependencies:
     - freebsd-make-build-release
@@ -62,7 +67,8 @@ freebsd-make-test-networked:
 #  before_script:
 #    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
-    - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
+    - sudo gmake uninstall
+    - sudo gmake install
     - cd regressions/features && make networked-method
   dependencies:
     - freebsd-make-build-release

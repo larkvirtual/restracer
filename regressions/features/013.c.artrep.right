@@ -1,2 +1,0 @@
-Warning: allocation zero bytes by heap-memory:realloc at 013.c:11
-Error: resource leak; handle 0x from 'heap-memory' allocated at 013.c:11 not deallocated. Never operated. Bytes leaked: 0, plus indirect leakage for pointer (example: malloc(size), when size is 0)

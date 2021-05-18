@@ -1,1 +1,0 @@
-ART detected fork() usage at 017.c:6, meanwhile fork() is forbidden according to template settings. Please, disable application fork() usage. If it isn't possible, contact ART author.

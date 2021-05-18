@@ -14,11 +14,19 @@ networked-method: build-n-run-networked.sh usleep
 
 build-n-run-networked.sh:
 	cp build-n-run-tracefile.sh build-n-run-networked.sh
-	patch < netw.diff
+	patch -s -i netw.diff
 
 usleep: usleep.c
 	$(CC) -o usleep usleep.c
 
-clean:
-	sh ./clean.sh
-	rm -f usleep build-n-run-networked.sh
+clean: clean-dirs
+	@sh ./clean.sh
+	@rm -f usleep build-n-run-networked.sh
+
+clean-dirs:
+	@for i in `find -type d | tail -n +2`; do \
+rm -f $$i/.tracefile.out; \
+rm -f $$i/main; \
+rm -f $$i/main.o; \
+rm -f $$i/template.tmp; \
+done

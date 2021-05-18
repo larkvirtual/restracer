@@ -1,0 +1,2 @@
+Error: deallocation of unallocated valid handle 0x by heap-memory:free at main.c:8
+Looks like target code execution died after calling free(0x) at main.c:8

@@ -1,0 +1,45 @@
+#!/bin/sh
+
+option_compile=0
+option_output=0
+compilation=0
+linking=0
+
+if [ -z "$RT_TEMPLATE" ]; then
+    # default profile
+    RT_TEMPLATE=posix-gcc-mt-file-lint
+fi
+TEMPLATE_PATH=/usr/local/lib/restracer/templates/$RT_TEMPLATE
+
+for arg in $*; do
+   if [ "$arg" = "-c" ]; then option_compile=1;
+   elif [ "$arg" = "-o" ]; then option_output=1;
+   elif [ "$arg" = "-E" ]; then option_compile=1;
+   fi
+done
+
+if [ "$option_output" -eq "1" ]; then
+    if [ "$option_compile" -eq "1" ]; then
+        compilation=1
+    else
+        linking=1
+    fi
+elif [ "$option_compile" -eq "1" ]; then
+    compilation=1
+fi
+
+if [ "$compilation" -eq "1" ]; then
+    if [ "$linking" -eq "0" ]; then
+        echo "doing -include $TEMPLATE_PATH/art.h"
+        cc -include $TEMPLATE_PATH/art.h $*
+    else
+        echo "doing -include $TEMPLATE_PATH/art.h $TEMPLATE_PATH/*.o"
+        cc -include $TEMPLATE_PATH/art.h $* $TEMPLATE_PATH/*.o
+    fi
+elif [ "$linking" -eq "1" ]; then
+    echo "doing $TEMPLATE_PATH/*.o"
+    cc $* $TEMPLATE_PATH/*.o
+else
+    echo "doing -include $TEMPLATE_PATH/art.h"
+    cc -include $TEMPLATE_PATH/art.h $*
+fi

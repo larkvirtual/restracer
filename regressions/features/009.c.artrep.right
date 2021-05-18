@@ -1,2 +1,0 @@
-Error 007: bad handle 0x usage by heap-memory:fwrite at 009.c:12
-Error 007: bad handle 0x usage by stream-io:fwrite at 009.c:12

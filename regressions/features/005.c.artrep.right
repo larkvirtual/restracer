@@ -1,2 +1,0 @@
-Warning: deallocation of resource 0x by heap-memory:free at 005.c:13 while allocated at 005.c:11 which never operated.
-Warning: deallocation of resource 0x by heap-memory:free at 005.c:17 while allocated at 005.c:15 which never operated.

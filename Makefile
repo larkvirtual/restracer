@@ -18,10 +18,8 @@ all:
 	$(MAKE) -C src/artlibgen/src
 	$(MAKE) -C src/artrepgen
 	$(MAKE) -C src/artlibgen/templates
-	$(MAKE) -C src/utils
 
 test: all
-	$(MAKE) -C src/artlibgen/templates
 	$(MAKE) -C regressions/features
 
 clean:
@@ -30,25 +28,25 @@ clean:
 	$(MAKE) -C src/artrepgen clean
 	$(MAKE) -C regressions/features clean
 	$(MAKE) -C src/artlibgen/templates clean
-	$(MAKE) -C src/utils clean
-	rm -f art.[cho] art_fork.[cho]
 
-install: all
-	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c
-	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-fork.xml art_fork.h art_fork.c
-	$(CC) -c art.c art_fork.c -g -ggdb -Wno-pointer-to-int-cast
-	cp art.h art_fork.h $(DESTDIR)/include
-	mkdir -p $(DESTDIR)/lib/art
-	cp art.o art_fork.o $(DESTDIR)/lib/art
-	cp src/artlibgen/src/artlibgen src/artrepgen/artrepgen src/utils/art* $(DESTDIR)/bin
+install:
+#	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-lint.xml art.h art.c
+#	src/artlibgen/src/artlibgen src/artlibgen/templates/posix-gcc-mt-file-fork.xml art_fork.h art_fork.c
+#	$(CC) -c art.c art_fork.c -g -ggdb -Wno-pointer-to-int-cast
+#	cp art.h art_fork.h $(DESTDIR)/include
+#	mkdir -p $(DESTDIR)/lib/art
+#	cp art.o art_fork.o $(DESTDIR)/lib/art
+	cp src/artlibgen/src/artlibgen src/artrepgen/artrepgen src/utils/* $(DESTDIR)/bin
+	mkdir -p                       $(DESTDIR)/lib/restracer
+	cp -r src/artlibgen/templates  $(DESTDIR)/lib/restracer
 
 deinstall: uninstall
 
 uninstall:
 	rm -f $(DESTDIR)/bin/artlibgen $(DESTDIR)/bin/artrepgen \
-$(DESTDIR)/bin/art_make $(DESTDIR)/bin/art-gcc $(DESTDIR)/bin/art-g++ \
-$(DESTDIR)/bin/art-ld $(DESTDIR)/bin/art_fork_make $(DESTDIR)/bin/art-fork-gcc \
-$(DESTDIR)/bin/art-fork-g++ $(DESTDIR)/bin/art-fork-ld
-	rm -f $(DESTDIR)/include/art.h $(DESTDIR)/lib/art/art.o
-	rm -f $(DESTDIR)/include/art_fork.h $(DESTDIR)/lib/art/art_fork.o
-	rm -rf $(DESTDIR)/lib/art
+$(DESTDIR)/bin/rt-make $(DESTDIR)/bin/restracer-make \
+$(DESTDIR)/bin/rt-gmake $(DESTDIR)/bin/restracer-gmake \
+$(DESTDIR)/bin/restracer-cc $(DESTDIR)/bin/restracer-c++ $(DESTDIR)/bin/restracer-ld
+#	rm -f $(DESTDIR)/include/art.h $(DESTDIR)/lib/art/art.o
+#	rm -f $(DESTDIR)/include/art_fork.h $(DESTDIR)/lib/art/art_fork.o
+	rm -rf $(DESTDIR)/lib/restracer
