@@ -1,0 +1,28 @@
+#!/bin/sh
+
+TARGET=restracer
+
+# Default toolchain is GCC
+#if [ "$CC" == "" ]; then CC=gcc; export CC; fi
+#if [ "$CXX" == "" ]; then CXX=g++; export CXX; fi
+#if [ "$LD" == "" ]; then LD=ld; fi
+
+#if [ "$CC" == "" ]; then CC=clang; fi
+#if [ "$CXX" == "" ]; then CXX=clang; fi
+#if [ "$LD" == "" ]; then LD=clang; fi
+
+####
+type gmake > /dev/null && ACTUAL_MAKE=gmake || ACTUAL_MAKE=make
+# CASE 1
+# ACTUAL_MAKE=gmake
+# Looks like calling restracer-gmake for GNU Makefile target on system with
+# gmake binary (FreeBSD environment)
+
+# CASE 2
+# ACTUAL_MAKE=make
+# Looks like calling restracer-gmake for GNU Makefile target on system without
+# gmake binary (GNU/Linux environment)
+####
+
+#CC=$TARGET-$(CC) CXX=$TARGET-$(CXX) LD=$TARGET-$(LD) make $*
+CC=$TARGET-cc CXX=$TARGET-c++ LD=$TARGET-ld $ACTUAL_MAKE $*

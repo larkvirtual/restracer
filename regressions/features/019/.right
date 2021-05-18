@@ -1,0 +1,2 @@
+Error: allocated handle 0x from 'neverland' at main.c:11 marked as already allocated at: main.c:10
+Error: resource leak; handle 0x from 'neverland' allocated at main.c:10 not deallocated. Never operated

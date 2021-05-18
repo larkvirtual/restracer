@@ -1,0 +1,1 @@
+Warning: deallocation of resource 0x by heap-memory:free at main.c:12 while allocated at main.c:10 which never operated.

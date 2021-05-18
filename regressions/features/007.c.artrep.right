@@ -1,3 +1,0 @@
-Warning: deallocation of resource 0x by stream-io:fclose at 007.c:11 while allocated at 007.c:9 which never operated.
-Error 007: bad handle 0x usage by heap-memory:fwrite at 007.c:13
-Error: resource 0x used by stream-io:fwrite at 007.c:13 was allocated at 007.c:9 and deallocated at 007.c:11

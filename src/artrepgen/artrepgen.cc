@@ -33,15 +33,15 @@ int main(int argc, char **argv) {
         fetcher->attach(argv[2]); // FIXME: проверить возвращаемое значение
 
         bool ret_val = false;
-        try
-        {
+//        try
+//        {
             ret_val = trace(fetcher);
-        }
-        catch(const char *msg)
-        {
-            cerr << "Received exception: \"" << msg <<"\"\nIncorrect input file\n" 
-            << "Perhaps the program is stopped incorrectly.\n";
-        }
+//        }
+//        catch(const char *msg)
+//        {
+//            cerr << "Received exception: \"" << msg <<"\"\nIncorrect input file\n"
+//            << "Perhaps the program is stopped incorrectly.\n";
+//        }
 
         // convert internal trace() retval into proper values
         if(ret_val) return 0;

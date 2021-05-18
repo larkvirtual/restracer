@@ -1,9 +1,8 @@
 Debian GNU/Linux, Ubuntu
-# apt-get install libxml++2.6-dev g++ dmidecode
+# apt-get install make libxml++2.6-dev g++
 
 FreeBSD 12
-# make:  'pkg install libxml++ gmake pkgconf dmidecode'
-# scons: 'pkg install libxml++ gmake pkgconf dmidecode scons-py37'
+# pkg install libxml++ gmake gsed pkgconf
 
 FreeBSD < 12
 # pkg_add -r libxml++26 gmake dmidecode?
