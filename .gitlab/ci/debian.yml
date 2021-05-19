@@ -1,6 +1,7 @@
 variables:
-#    IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
-    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
+    IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
+#    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
+#blacknote.site resolves as white IP address inside DinD, so skipped
 
 debian-build-debug:
   image: ${IMG}:build
