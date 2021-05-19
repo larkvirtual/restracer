@@ -1,10 +1,12 @@
+variables:
+#    IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
+    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
+
 debian-build-debug:
-  image: debian
+  image: ${IMG}:build
   stage: build
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-dev g++
   script:
     - NPROC=$(nproc)
     - echo "Using '$NPROC' processes to build source..."
@@ -12,17 +14,15 @@ debian-build-debug:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 debian-build-release:
-  image: debian
+  image: ${IMG}:build
   stage: build
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-dev g++
   script:
     - NPROC=$(nproc)
     - echo "Using '$NPROC' processes to build source..."
@@ -41,17 +41,15 @@ debian-build-release:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 debian-test-file:
-  image: debian
+  image: ${IMG}:test-file
   stage: test
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install gcc make libxml++2.6-2v5
   script:
     - make install
     - cd regressions/features && make tracefile-method
@@ -60,17 +58,15 @@ debian-test-file:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 debian-test-networked:
-  image: debian
+  image: ${IMG}:test-netw
   stage: test
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
     - make install
     - cd regressions/features && make networked-method
@@ -79,6 +75,6 @@ debian-test-networked:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true

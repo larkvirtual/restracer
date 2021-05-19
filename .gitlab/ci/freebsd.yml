@@ -35,9 +35,9 @@ freebsd-make-build-release:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 freebsd-make-test-file:
   image: freebsd
@@ -55,17 +55,15 @@ freebsd-make-test-file:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 freebsd-make-test-networked:
   image: freebsd
   stage: test
   tags:
     - freebsd
-#  before_script:
-#    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
     - sudo gmake uninstall
     - sudo gmake install
@@ -75,9 +73,9 @@ freebsd-make-test-networked:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-      when: manual
-      allow_failure: true
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
 
 # Disabled due to libxml++ compilation -Werror
 #freebsd-scons-build-debug:
