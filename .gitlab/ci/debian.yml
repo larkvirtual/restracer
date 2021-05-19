@@ -15,9 +15,9 @@ debian-build-debug:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-#      when: manual
-#      allow_failure: true
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-build-release:
   image: ${IMG}:build
@@ -42,9 +42,9 @@ debian-build-release:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-#      when: manual
-#      allow_failure: true
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-test-file:
   image: ${IMG}:test-file
@@ -59,9 +59,9 @@ debian-test-file:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-#      when: manual
-#      allow_failure: true
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
 
 debian-test-networked:
   image: ${IMG}:test-netw
@@ -76,6 +76,6 @@ debian-test-networked:
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-#      when: manual
-#      allow_failure: true
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true

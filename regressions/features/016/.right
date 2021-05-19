@@ -1,2 +1,2 @@
-Warning: reallocation handle 0x has the same size (273 bytes) atmain.c:11
+Warning: reallocation handle 0x has the same size (273 bytes) at main.c:11
 Warning: deallocation of resource 0x by heap-memory:free at main.c:13 while allocated at main.c:11 which never operated.

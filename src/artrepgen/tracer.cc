@@ -576,7 +576,7 @@ bool transactionAnalyzerforReallocators(CVLineFetcher *fetcher, traceInfo &ti,
                             cout << "Warning: reallocation handle 0x"
                                  << showHandle(usedHandle)
                                  << " has the same size (" << usedSize
-                                 << " bytes) at" << showFileLine(fl) << endl;
+                                 << " bytes) at " << showFileLine(fl) << endl;
                         }
 
                         lineno = fetcher->fetchLine(line);
