@@ -1,0 +1,2 @@
+FROM debian
+RUN apt update && apt -y install make libxml++2.6-dev g++
