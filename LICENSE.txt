@@ -1,1 +1,1 @@
-Project license is BSD.
+GNU GPLv3
