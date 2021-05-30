@@ -53,7 +53,7 @@ int     Generator_C_USER_Body_Prolog(CTemplate &tpl, CDomain &tmpDom,
                     << "\t\tart_start(\"autoinitialized by "
                     << tmpTor.name << "() at __FILE__:__LINE__\"); "
                     << "\t\tretval = pthread_mutex_lock(&art_mutex);" << endl
-                    << "\t\tif(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl   
+                    << "\t\tif(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl
                     << "\t}" << endl
                     << endl << endl;
             }
@@ -89,6 +89,7 @@ int     Generator_C_USER_Body_Validation(CTemplate &tpl, CDomain &tmpDom,
     size_t	domid,	// Domain ID (just index in vector of Domains)
             t,	// arg counter
             tmpTor_validateDom_before_size;
+    int     rv;
     string	domname;
     CArg	tmpArg;
 
@@ -106,8 +107,8 @@ int     Generator_C_USER_Body_Validation(CTemplate &tpl, CDomain &tmpDom,
         t++){
         domname = tmpTor.validateDom_before[t];
         if(domname != ""){
-            domid = Domaintoid(tpl, domname);
-            if(((size_t)-1) != domid) { // found ;)
+            rv = Domaintoid(tpl, domname, &domid);
+            if(!rv) { // found ;)
                 CExpr	validationExpr;
                 string	type;
                 validationExpr = tpl.domains[domid].bad_handle;

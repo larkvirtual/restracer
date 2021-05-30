@@ -369,12 +369,9 @@ void	Generator_C_Header(CTemplate &tpl, ofstream &head){
         cerr << "NYI at " << __FILE__ << ":" << __LINE__ << endl;
     }
 
-
     head << "#ifdef __cplusplus" << endl;
     head << "extern \"C\" {" << endl;
     head << "#endif" << endl << endl;
-
-
 
     if(tpl.compiler_type == "gcc"){
         head << "typedef unsigned long long artuint64;" << endl;
@@ -411,7 +408,7 @@ void	Generator_C_Header(CTemplate &tpl, ofstream &head){
     }
     head << "void\tarterrlog(char *msg, const char *file, size_t line);" << endl;
     head << "void\tart_trace(int n, ...);" << endl;
-    head << "void\tart_start(const char *appname);" << endl;
+    head << "void\tart_start(const char *params);" << endl;
     head << "void\tart_stop(void);" << endl << endl;
 
     Generator_C_Header_Declaration(tpl, head);
@@ -556,6 +553,15 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
         src << "}" << endl << endl;
     }
 
+    if(tpl.remote_mode){
+        src << "static int rt_wait_server_socket(const char *host, u_int32_t port, u_int8_t sleep_ms) {" << endl;
+        src << "    (void) host;" << endl;
+        src << "    (void) port;" << endl;
+        src << "    useconds_t us = sleep_ms * 1000;" << endl;
+        src << "    return usleep(us);" << endl;
+        src << "}" << endl << endl;
+    }
+
     src << "void\tart_trace(int n, ...){" << endl;
     if(tpl.remote_mode){
         if(tpl.trap_on_io_err){
@@ -628,12 +634,19 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
     }
     src << "}" << endl << endl;
 
-    src << "void\tart_start(const char *appname){" << endl;
+    src << "void\tart_start(const char *params){" << endl;
     if(tpl.multithreaded){
         if(tpl.threading == "posix"){
             src << "int retval;" << endl;
+            if(tpl.remote_mode){
+                src << "char *ptr, *ptr2;" << endl;
+            }
         }
-        else if(tpl.threading == "win32"){/* nothing */}
+        else if(tpl.threading == "win32"){/* nothing (for retval) */
+            if(tpl.remote_mode){
+                src << "char *ptr, *ptr2;" << endl;
+            }
+        }
     }
     if(tpl.errlogmode != "" && tpl.errlogmode != "console")
         src << "unlink(\"" << tpl.errlogmode << "\");" << endl;
@@ -694,12 +707,29 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
         *tmp = 0;
         // опасный код, тут проверок почти нет
 
+        src << "if((ptr = strstr(params, \"autostart\"))){" << endl;
+        src << "\tchar file[256] = \"\";" << endl;
+        src << "\tchar command[256] = \"sh -c 'artrepgen --sock " << port << " > \\\"\";" << endl;
+        src << "\tptr2 = strchr(ptr + 9, ';'); /* 9 = strlen(autostart); */" << endl;
+        src << "\tif(!ptr2){arterrlog(\"There is no splitter ';'\", __FILE__, __LINE__);}" << endl;
+        src << "\tstrncpy(file, ptr2 + 1, 255);" << endl;
+        src << "\tstrcat(command, file);" << endl;
+        src << "\tstrcat(command, \"\\\" &'\");" << endl;
+        src << "\tretval = system(command);" << endl;
+        src << "\tif(retval){arterrlog(\"artgepgen system() autostart failure\", __FILE__, __LINE__);" << endl;
+        src << "\t\tarterrlog(command, __FILE__, __LINE__);" << endl;
+        src << "\t\texit(-1);}" << endl;
+        src << "\tretval = rt_wait_server_socket(\"\", 0, 16);" << endl;
+        src << "\tif(retval){arterrlog(\"rt_wait_server_socket(\"\", 0, 16) failure\", __FILE__, __LINE__);" << endl;
+        src << "\t\texit(-1);}" << endl;
+        src << "}" << endl << endl;
+
         src << "art_socket = LTNet_ConnectClient(\"" << host << "\", " << port << ");" << endl;
         //src << "art_socket = LTNet_ConnectClient(" << tpl.trace_target << ");" << endl;
         src << "if(art_socket < 0){arterrlog(\"LTNet_ConnectClient()\", __FILE__, __LINE__);" << endl;
         src << "\texit(art_socket);}" << endl;
     }
-    else	{
+    else{
         // fopen() tracefile
         src << "art_tracefile = fopen(\"" << tpl.trace_target << "\", \"w\");" << endl;
         src << "if(art_tracefile == NULL){arterrlog(\"fopen()\", __FILE__, __LINE__);exit(-1);}" << endl;
@@ -716,7 +746,7 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
 
     src << "art_retval = atexit((void *)art_stop);" << endl;
     src << "if(art_retval == -1){arterrlog(\"atexit()\", __FILE__, __LINE__);exit(-1);}" << endl;
-    
+
     src << "retval = pthread_mutex_unlock(&art_mutex);" << endl;
     src << "if(retval){arterrlog(\"pthread_mutex_lock()\", __FILE__, __LINE__); exit(-2);}" << endl;
 
@@ -777,13 +807,13 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
 void escape_line(string &line) {
     string newLine;
     char theChar;
-    
+
     for(size_t i = 0, l = line.length(); i < l; i++) {
         theChar = line[i];
         if('"' == theChar) { newLine += "\\\""; }
         else newLine += theChar;
     }
-    
+
     line = newLine;
 }
 

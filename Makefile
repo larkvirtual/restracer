@@ -1,17 +1,24 @@
 DESTDIR?=/usr/local
 
+# artlibgen, artrepgen uses CFLAGS
+# instrumented restracer library uses CIFLAGS
+
 # -Wno-deprecated-declarations prevents libxml++-2.6 warnings
 debug:
 	CFLAGS="-g -ggdb -Wall -Wextra -Werror -ansi -DART_DEBUG_INSERT_DEVEL_COMMENT \
 -std=c++11 \
 -Wno-deprecated-declarations \
--DART_DEBUG" $(MAKE) all
+-DART_DEBUG" \
+CIFLAGS="-O0 -g -ggdb -Wno-pointer-to-int-cast -Wno-int-conversion" \
+$(MAKE) all
 #	CFLAGS="-Wall -Wextra -Werror -ansi -pedantic -std=c++0x \
 #-DART_DEBUG_INSERT_DEVEL_COMMENT \
 #-DART_DEBUG" make all
 
 release:
-	CFLAGS="-Wno-deprecated-declarations -O3 -fomit-frame-pointer" $(MAKE) all
+	CFLAGS="-Wno-deprecated-declarations -O3 -fomit-frame-pointer" \
+CIFLAGS="-O2 -Wno-pointer-to-int-cast -Wno-int-conversion" \
+$(MAKE) all
 
 all:
 	$(MAKE) -C src/libs
@@ -46,6 +53,7 @@ uninstall:
 	rm -f $(DESTDIR)/bin/artlibgen $(DESTDIR)/bin/artrepgen \
 $(DESTDIR)/bin/rt-make $(DESTDIR)/bin/restracer-make \
 $(DESTDIR)/bin/rt-gmake $(DESTDIR)/bin/restracer-gmake \
+$(DESTDIR)/bin/restracer-gcc $(DESTDIR)/bin/restracer-g++ \
 $(DESTDIR)/bin/restracer-cc $(DESTDIR)/bin/restracer-c++ $(DESTDIR)/bin/restracer-ld
 #	rm -f $(DESTDIR)/include/art.h $(DESTDIR)/lib/art/art.o
 #	rm -f $(DESTDIR)/include/art_fork.h $(DESTDIR)/lib/art/art_fork.o

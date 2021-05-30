@@ -1,2 +1,3 @@
 FROM debian
-RUN apt update && apt -y install gcc make libxml++2.6-2v5 patch
+RUN apt update && apt -y install gcc make libxml++2.6-2v5 patch psmisc
+# killall from psmisc
