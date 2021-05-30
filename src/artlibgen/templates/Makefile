@@ -1,3 +1,4 @@
+CIFLAGS?=-O0 -g -ggdb -Wno-pointer-to-int-cast -Wno-int-conversion
 SED:=$(shell type gsed > /dev/null && echo gsed || echo sed)
 
 all: compiled
@@ -22,17 +23,14 @@ done
 compiled-generics: sources
 	@for i in posix-gcc-mt-file-fork.xml posix-gcc-mt-file-lint.xml posix-gcc-mt-netw-lint.xml; do \
 d=`echo "$$i" | ${SED} 's/.xml//g' -`; \
-cc -c "$$d/art.c" -I "$$d" -o "$$d/art.o" \
--O2 -g -ggdb -Wno-pointer-to-int-cast -Wno-int-conversion; \
+cc -c "$$d/art.c" -I "$$d" -o "$$d/art.o" ${CIFLAGS}; \
 done
 
 compiled-specials: sources
 	@for i in posix*special.xml; do \
 d=`echo "$$i" | ${SED} 's/.xml//g' -`; \
-cc -c "$$d/art.c" -I "$$d" -I. -o "$$d/art.o" \
--O2 -g -ggdb -Wno-pointer-to-int-cast -Wno-int-conversion; \
-cc -c f04-api.c            -I. -o "$$d/f04-api.o" \
--O2 -g -ggdb; \
+cc -c "$$d/art.c" -I "$$d" -I. -o "$$d/art.o"     ${CIFLAGS}; \
+cc -c f04-api.c            -I. -o "$$d/f04-api.o" ${CIFLAGS}; \
 done
 
 compiled: compiled-generics compiled-specials

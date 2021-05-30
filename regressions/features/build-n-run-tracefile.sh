@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/sh
 
 SED=$(type gsed > /dev/null && echo gsed || echo sed)
 
@@ -7,13 +7,13 @@ passFAILED=0
 FAILEDlist=""
 total=0
 
-for d in `find . -type d -name "[0-9]*"`; do
+for d in `find . -type d -name "0[0-9]*" | sort`; do
 #    pushd . > /dev/null
     d=`echo $d | ${SED} 's/\.\///g' -`
     if [ "$d" = 019 ]; then
         RT_TEMPLATE=posix-gcc-mt-file-special
     else
-        RT_TEMPLATE=""
+        RT_TEMPLATE=posix-gcc-mt-file-lint
     fi
 
     cd "$d" && CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE rt-gmake \
@@ -36,13 +36,13 @@ for d in `find . -type d -name "[0-9]*"`; do
         else
             passFAILED=$((passFAILED+1))
             echo "$i FAILED"
-            FAILEDlist="$FAILEDlist $i"
+            FAILEDlist="$FAILEDlist $d"
             mv tracefile.out .tracefile.out
         fi
     else
         passFAILED=$((passFAILED+1))
         echo "$i FAILED"
-        FAILEDlist="$FAILEDlist $i"
+        FAILEDlist="$FAILEDlist $d"
         mv tracefile.out .tracefile.out
     fi
 

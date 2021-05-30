@@ -1,7 +1,7 @@
-#REGISTRY=registry.gitlab.com
-#REG_GROUP=docker-images10
-REGISTRY=blacknote.site:5050
-REG_GROUP=restracer
+REGISTRY=registry.gitlab.com
+REG_GROUP=docker-images10
+#REGISTRY=blacknote.site:5050
+#REG_GROUP=restracer
 IMAGE=debian-plus-build-deps
 
 all: login build push
