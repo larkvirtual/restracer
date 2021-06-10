@@ -4,8 +4,8 @@ gentoo-build-debug:
   stage: build
   tags:
     - docker
- before_script:
-   - apt update && apt -y install scons make libxml++2.6-dev g++
+  before_script:
+    - apt update && apt -y install scons make libxml++2.6-dev g++
   script:
     - echo "Using '$(nproc)' processes to build source..."
     - cd src && scons RELEASE=0 -Q -j$(nproc)
@@ -22,8 +22,8 @@ gentoo-build-release:
     - wget -O portage.tar.xz https://mirror.yandex.ru/gentoo-distfiles/snapshots/portage-20210408.tar.xz
     - tar xf  portage.tar.xz
     - mv      portage gentoo
-   - emerge --getbinpkg --sync
-   - emerge -G dev-cpp/libxmlpp dev-util/pkgconfig
+    - emerge --getbinpkg --sync
+    - emerge -G dev-cpp/libxmlpp dev-util/pkgconfig
   script:
     - echo "Using '$(nproc)' processes to build source..."
     - cd /builds/restracer/restracer
@@ -45,8 +45,8 @@ gentoo-test-file:
   stage: test
   tags:
     - docker
- before_script:
-   - apt update && apt -y install gcc make libxml++2.6-2v5
+  before_script:
+    - apt update && apt -y install gcc make libxml++2.6-2v5
   script:
     - cd regressions/features && make tracefile-method
   dependencies:
@@ -58,7 +58,7 @@ gentoo-test-networked:
   tags:
     - docker
  before_script:
-   - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
   script:
     - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
     - cd regressions/features && make networked-method
