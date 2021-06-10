@@ -1,0 +1,100 @@
+variables:
+#    IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
+    IMG: fedora
+
+#fedora-build-debug:
+##  image: ${IMG}:build
+#
+##  image: fedora
+#  image: ${IMG}
+#  stage: build
+#  tags:
+#    - docker
+#  before_script:
+#    - dnf install -y make gcc-c++ libxml++-devel
+#  script:
+#    - NPROC=$(nproc)
+#    - echo "Using '$NPROC' processes to build source..."
+#    - make debug -j$NPROC
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+#      when: always
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
+
+fedora-build-release:
+#  image: ${IMG}:build
+
+#  image: fedora
+  image: ${IMG}
+  stage: build
+  tags:
+    - docker
+  before_script:
+    - dnf install -y make gcc-c++ libxml++-devel
+  script:
+    - NPROC=$(nproc)
+    - echo "Using '$NPROC' processes to build source..."
+    - make release -j$NPROC
+    - make install
+  artifacts:
+    paths:
+      - src/artlibgen/src/artlibgen
+      - src/artrepgen/artrepgen
+      - src/artlibgen/templates/
+  cache:
+    paths:
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+fedora-test-file:
+#  image: ${IMG}:build
+
+#  image: fedora
+  image: ${IMG}
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - dnf install -y make gcc-c++ libxml++ findutils diffutils
+  script:
+    - make install
+    - cd regressions/features && make tracefile-method
+  dependencies:
+    - fedora-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+fedora-test-networked:
+#  image: ${IMG}:build
+
+#  image: fedora
+  image: ${IMG}
+  stage: test
+  tags:
+    - docker
+  before_script:
+    - dnf install -y make gcc-c++ libxml++ findutils diffutils
+  script:
+    - make install
+    - cd regressions/features && make networked-method
+  dependencies:
+    - fedora-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
