@@ -1,0 +1,117 @@
+variables:
+#    IMG: alt:sisyphus
+#    IMG: alt:p9
+#    IMG: alt:p8
+    IMG: alt
+
+#alt-build-debug:
+##  image: ${IMG}:build
+#
+##  image: alt
+#  image: ${IMG}
+#  stage: build
+#  tags:
+#    - docker
+#  before_script:
+#    - apt-get update && apt-get install -y make gcc-c++ libxml++2-devel
+#  script:
+#    - NPROC=$(nproc)
+#    - echo "Using '$NPROC' processes to build source..."
+#    - make debug -j$NPROC
+#  rules:
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+#      when: always
+#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+#      when: manual
+#      allow_failure: true
+
+alt-build-release:
+#  image: ${IMG}:build
+
+#  image: alt
+  image: ${IMG}
+  stage: build
+  tags:
+    - docker
+  before_script:
+#    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
+    - rm /etc/apt/sources.list.d/yandex.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
+    - apt-get update && apt-get install -y make gcc-c++ libxml++2-devel
+  script:
+    - NPROC=$(nproc)
+    - echo "Using '$NPROC' processes to build source..."
+    - make release -j$NPROC
+    - make install
+  artifacts:
+    paths:
+      - src/artlibgen/src/artlibgen
+      - src/artrepgen/artrepgen
+      - src/artlibgen/templates/
+  cache:
+    paths:
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+alt-test-file:
+#  image: ${IMG}:build
+
+#  image: alt
+  image: ${IMG}
+  stage: test
+  tags:
+    - docker
+  before_script:
+#    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
+    - rm /etc/apt/sources.list.d/yandex.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
+    - apt-get update && apt-get install -y make gcc-c++ libxml++2
+  script:
+    - make install
+    - cd regressions/features && make tracefile-method
+  dependencies:
+    - alt-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
+
+alt-test-networked:
+#  image: ${IMG}:build
+
+#  image: alt
+  image: ${IMG}
+  stage: test
+  tags:
+    - docker
+  before_script:
+#    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
+    - rm /etc/apt/sources.list.d/yandex.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
+    - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
+    - apt-get update && apt-get install -y make gcc-c++ libxml++2
+  script:
+    - make install
+    - cd regressions/features && make networked-method
+  dependencies:
+    - alt-build-release
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true
