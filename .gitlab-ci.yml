@@ -11,6 +11,7 @@ stages:
 include:
 #  - local: .gitlab/ci/debian.yml       # DinD, images with deps, moderate speed
 #  - local: .gitlab/ci/fedora.yml       # DinD, no images with deps, slower speed
-  - local: .gitlab/ci/freebsd.yml       # Docker, fastest
+  - local: .gitlab/ci/altlinux.yml       # DinD, no images with deps, slower speed
+#  - local: .gitlab/ci/freebsd.yml       # Docker, fastest
 #  - local: .gitlab/ci/gentoo.yml       # DinD, incomplete
 #  - local: .gitlab/ci/archlinux.yml    # DinD, incomplete
