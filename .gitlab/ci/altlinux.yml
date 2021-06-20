@@ -1,9 +1,3 @@
-variables:
-#    IMG: alt:sisyphus
-#    IMG: alt:p9
-#    IMG: alt:p8
-    IMG: alt
-
 #alt-build-debug:
 ##  image: ${IMG}:build
 #
@@ -25,11 +19,12 @@ variables:
 #      when: manual
 #      allow_failure: true
 
-alt-build-release:
-#  image: ${IMG}:build
+#    IMG: alt:sisyphus
+#    IMG: alt:p9
+#    IMG: alt:p8
 
-#  image: alt
-  image: ${IMG}
+alt-build-release:
+  image: alt
   stage: build
   tags:
     - docker
@@ -63,10 +58,7 @@ alt-build-release:
       allow_failure: true
 
 alt-test-file:
-#  image: ${IMG}:build
-
-#  image: alt
-  image: ${IMG}
+  image: alt
   stage: test
   tags:
     - docker
@@ -90,9 +82,7 @@ alt-test-file:
       allow_failure: true
 
 alt-test-networked:
-#  image: ${IMG}:build
-
-#  image: alt
+  image: alt
   image: ${IMG}
   stage: test
   tags:
