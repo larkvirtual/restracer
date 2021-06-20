@@ -50,7 +50,7 @@ arch-test-networked:
   tags:
     - docker
   before_script:
-    - apt update && apt -y install gcc make libxml++2.6-2v5 patch
+    - apt update && apt -y install gcc make libxml++2.6-2v5
   script:
     - cd src/artlibgen/templates && make && cd ../../.. # to generate networked templates
     - cd regressions/features && make networked-method

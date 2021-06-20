@@ -220,7 +220,7 @@
       name=""
     />
     <args
-      type="void*"
+      type="const void*"
       name="ptr"
     />
     <args

@@ -1,4 +1,4 @@
-CXX ?= g++
+CXX ?= c++
 SOURCES=$(wildcard *.cc)
 OBJECTS=$(SOURCES:.cc=.o)
 TARGET=liblinefetch.a
@@ -9,7 +9,7 @@ $(TARGET): $(OBJECTS)
 	$(AR) cr $@ $(OBJECTS)
 
 .cc.o:
-	$(CXX) -c $(CFLAGS) $< -o $@
+	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 .PHONY: clean
 clean:

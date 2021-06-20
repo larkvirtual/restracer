@@ -18,13 +18,13 @@ networked-method: clean usleep
 	@echo "*******************************************************************"
 
 usleep: usleep.c
-	$(CC) -o usleep usleep.c
+	$(CC) $(CFLAGS) -o usleep usleep.c
 
 clean: clean-dirs
 	@rm -f usleep
 
 clean-dirs:
-	@for i in `find -type d | tail -n +2`; do \
+	@for i in `find . -type d | tail -n +2`; do \
 rm -f $$i/.tracefile.out; \
 rm -f $$i/main; \
 rm -f $$i/main.o; \

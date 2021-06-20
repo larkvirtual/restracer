@@ -9,9 +9,25 @@ stages:
 #  - package
 
 include:
-#  - local: .gitlab/ci/debian.yml       # DinD, images with deps, moderate speed
-#  - local: .gitlab/ci/fedora.yml       # DinD, no images with deps, slower speed
+# Debian
+#  - local: .gitlab/ci/debian-with-deps.yml       # DinD, images with deps, moderate speed
+# DISABLED DUE TO UNEXPECTED ERROR:
+#Using Docker executor with image fedora:build ...
+#Pulling docker image fedora:build ...
+  - local: .gitlab/ci/debian.yml       # DinD, no images with deps, slower speed
+
+# Fedora
+  - local: .gitlab/ci/fedora.yml       # DinD, no images with deps, slower speed
+
+# FreeBSD
+#  - local: .gitlab/ci/freebsd-1-stage.yml       # Docker, fastest
+  - local: .gitlab/ci/freebsd-3-stage.yml       # Docker, fastest
+
+# AltLinux
   - local: .gitlab/ci/altlinux.yml       # DinD, no images with deps, slower speed
-#  - local: .gitlab/ci/freebsd.yml       # Docker, fastest
+
+# Gentoo
 #  - local: .gitlab/ci/gentoo.yml       # DinD, incomplete
+
+# ArchLinux
 #  - local: .gitlab/ci/archlinux.yml    # DinD, incomplete

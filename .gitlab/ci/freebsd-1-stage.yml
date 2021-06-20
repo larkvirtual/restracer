@@ -1,0 +1,26 @@
+freebsd-make-build-release-test-networked:
+  image: freebsd
+  stage: build
+  tags:
+    - freebsd
+#  before_script:
+#    - pkg install libxml++ gmake
+  script:
+    - NPROC=$(sysctl hw.ncpu | awk '{print $2}')
+    - echo "Using '$NPROC' processes to build source..."
+    - sudo gmake uninstall
+    - gmake release -j$NPROC
+    - sudo gmake install
+    - cd regressions/features && make tracefile-method
+#    - cd regressions/features && make networked-method
+  cache:
+    paths:
+      - "src/artrepgen/*.o"
+      - "src/libs/libtplreader/*.o"
+      - "src/artlibgen/src/*.o"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
+      when: always
+    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
+      when: manual
+      allow_failure: true

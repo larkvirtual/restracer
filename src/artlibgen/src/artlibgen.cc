@@ -5,10 +5,11 @@
 #include "gen_xml_sax_read.h" // saxparser_initStr2Maps(), saxparser_templateLoader();
 
 void showHelp(void) {
-    printf("params:  <template> <header> <source> # generate art.h art.c from template file\n");
+    printf("params:  <template> <instrum|preload> <header> <source> # generate instrumentation or preload files from template\n");
     printf("params:  <template>                   # dumps template (DEBUG VERSION ONLY)\n");
     printf("params:  --version                    # prints version\n");
-    printf("example: tpl_generic3.xml art.h art.c\n");
+    printf("example: tpl_generic3.xml instrum restracer.h restracer.c\n");
+    printf("example: tpl_generic3.xml preload /dev/null   restracer_preload.c\n");
     printf("example: tpl_generic3.xml\n");
 }
 
@@ -22,7 +23,7 @@ int main(int argc, char **argv) {
         }
         else dumpOnlyAndExit = true;
     }
-    else if(4 == argc) { /* просто ничего не делаем, обработка этой ситуации дальше */ }
+    else if(5 == argc) { /* do nothing right here, will handle after */ }
     else { showHelp(); return 0; }
 
     // Фаза 1. Загрузка шаблона в структуру CTemplate
@@ -43,13 +44,25 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    // Фаза 2. Вызов генератора для генерации встраиваемых файлов по шаблону
-    retval = Generator_C(tpl, argv[1], argv[2], argv[3]);
-    if(retval) {
-        cerr << "Generation error. See err.log for details." << endl;
-        cerr << "error code = " << retval << endl;
+    if(0 == strcmp(argv[2], "instrum")) {
+        // Фаза 2. Вызов генератора для генерации встраиваемых файлов по шаблону
+        retval = Generator_C(tpl, argv[1], argv[3], argv[4]);
+        if(retval) {
+            cerr << "Generation error. See err.log for details." << endl;
+            cerr << "error code = " << retval << endl;
+        }
+        else cout << "Files " << argv[3] << ", " << argv[4] << " are generated." << endl;
+    } else if(0 == strcmp(argv[2], "preload")){
+        retval = Generate_Preload_C(tpl, argv[4]);
+        if(retval) {
+            cerr << "Preload generation error. See err.log for details." << endl;
+            cerr << "error code = " << retval << endl;
+        }
+        else cout << "Preload file " << argv[4] << " generated." << endl;
+    } else {
+        fprintf(stderr, "Secord arg ('%s') must be 'instrum' or 'preload'\n", argv[2]);
+        return 1;
     }
-    else cout << "Files " << argv[2] << ", " << argv[3] << " are generated." << endl;
 
     return retval;
 }

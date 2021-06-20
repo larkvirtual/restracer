@@ -30,11 +30,34 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
         RT_TEMPLATE=posix-gcc-mt-netw-lint
     fi
 
+    if [ "$d" = 020 ]; then
+        RT_MAKE_CHK_INSTRUM_ARG=1
+        RT_DYNAMIC_ARG=1
+
+        cd "$d" && \
+        CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE \
+        RT_DYNAMIC=$RT_DYNAMIC_ARG rt-gmake \
+        &&                          RT_TEMPLATE=$RT_TEMPLATE \
+        RT_CHK_INSTRUM=$RT_MAKE_CHK_INSTRUM_ARG restracer ./main 2> restracer-err.txt || true
+        grep "calling not from restracer wrapper (0x"               restracer-err.txt > /dev/null
+
+        if [ $? = 0 ]; then
+            passOK=$((passOK+1))
+            echo "$i OK";
+        else
+            passFAILED=$((passFAILED+1))
+            FAILEDlist="$FAILEDlist $d"
+        fi
+    else
+        RT_MAKE_CHK_INSTRUM_ARG=0
+        RT_DYNAMIC_ARG=0
+
     artrepgen --sock 12345 >     "$d/.real" &
     ./usleep $repGenStartupTime
 
-    cd "$d" && CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE rt-gmake \
-    && ./main || true
+    cd "$d" && \
+    CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE RT_DYNAMIC=$RT_DYNAMIC_ARG rt-gmake \
+    && RT_CHK_INSTRUM=$RT_MAKE_CHK_INSTRUM_ARG restracer ./main || true
 
     ../usleep $repGenShutdownTime
     killall -9 artrepgen || true
@@ -61,6 +84,8 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
         echo "$i FAILED"
         FAILEDlist="$FAILEDlist $d"
     fi
+    fi
+
 
     total=$((total+1))
  #   popd    > /dev/null

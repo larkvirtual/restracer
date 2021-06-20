@@ -1,5 +1,5 @@
-CXX ?= g++
-CFLAGS+=$(shell pkg-config --cflags libxml++-2.6) \
+CXX ?= c++
+CXXFLAGS+=$(shell pkg-config --cflags libxml++-2.6) \
     -I../../libs/libtplreader -I../../libs/liblinefetch
 LDFLAGS=-L../../libs/libtplreader -L../../libs/liblinefetch \
     -ltplreader -llinefetch $(shell pkg-config --libs libxml++-2.6)
@@ -13,7 +13,7 @@ $(TARGET): $(OBJECTS)
 	$(CXX) -o $@ $(OBJECTS) $(LDFLAGS)
 
 .cc.o:
-	$(CXX) -c $(CFLAGS) $< -o $@
+	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 .PHONY: clean
 clean:

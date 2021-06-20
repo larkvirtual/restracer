@@ -24,7 +24,6 @@ cp src/artlibgen/src/artlibgen $art_dir &&
 cp src/artrepgen/artrepgen $art_dir &&
 strip $art_dir/* &&
 cp src/artlibgen/templates/posix-gcc-mt-file-lint.xml $art_dir &&
-cp src/make-distro-Makefile $art_dir/Makefile &&
 cp regressions/features/003.c $art_dir/000.c &&
 tar cf $art_dir.tar $art_dir &&
 cp $art_dir.tar $art_dir.tar- &&
