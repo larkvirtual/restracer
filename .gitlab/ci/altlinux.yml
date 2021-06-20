@@ -30,7 +30,7 @@ alt-build-release:
     - docker
   before_script:
 #    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
-    - rm /etc/apt/sources.list.d/yandex.list
+    - rm -f /etc/apt/sources.list.d/yandex.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
@@ -64,7 +64,7 @@ alt-test-file:
     - docker
   before_script:
 #    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
-    - rm /etc/apt/sources.list.d/yandex.list
+    - rm -f /etc/apt/sources.list.d/yandex.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
@@ -89,7 +89,7 @@ alt-test-networked:
     - docker
   before_script:
 #    - apt-repo rm all && apt-repo add p9#won't work: apt-repo is missing
-    - rm /etc/apt/sources.list.d/yandex.list
+    - rm -f /etc/apt/sources.list.d/yandex.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64 classic" >  /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/x86_64-i586 classic" >> /etc/apt/sources.list.d/alt.list
     - echo "rpm [p9] http://ftp.altlinux.org/pub/distributions/ALTLinux p9/branch/noarch classic" >> /etc/apt/sources.list.d/alt.list
