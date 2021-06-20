@@ -2,7 +2,8 @@ Debian GNU/Linux, Ubuntu
 # apt-get install make libxml++2.6-dev g++
 
 Fedora (34)
-# dnf install make libxml++-devel gcc-c++ libxml++-devel findutils diffutils
+# dnf install make libxml++-devel gcc-c++ findutils diffutils psmisc  #procps-ng
+# for         make libxml++       c++     find      diff      killall #pwdx
 
 FreeBSD 12
 # pkg install libxml++ gmake gsed pkgconf

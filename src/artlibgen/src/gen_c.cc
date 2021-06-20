@@ -2,17 +2,17 @@
 
 #include <fstream>
 
-void	Generator_C_StubInfo(CTemplate &tpl, ofstream &file){
+void	Generate_C_StubInfo(CTemplate &tpl, ofstream &file){
     file<<
            "/***************************************************************************"
         << endl;
     file<<"* Copyright (C) " << ART_VENDOR_DATE << " " << ART_VENDOR << endl;
     file<<"*" << endl;
     file<<"* THIS FILE GENERATED FROM TEMPLATE '" << tpl.name << "'" << endl;
-    file<<"* BY ART LIBRARY GENERATOR VERSION " << ART_VERSION_BRANCH <<
+    file<<"* BY RESTRACER LIBRARY GENERATOR VERSION " << ART_VERSION_BRANCH <<
           ART_VERSION_SUB << ART_VERSION_EXTRA << endl;
     file<<"*" << endl;
-    file<<"* ART MARKED \"" << ART_DEVELNAME << "\"" << endl;
+    file<<"* RESTRACER MARKED \"" << ART_DEVELNAME << "\"" << endl;
     file<<"*" << endl;
     file<<"* !!! DON\'T TOUCH THESE UNLESS YOU REALLY KNOW WHAT YOU'RE DOING !!!" << endl;
     file<<
@@ -306,7 +306,7 @@ void	Generator_C_Header_Redefenition(CTemplate &tpl, ofstream &head){
 }
 
 void	Generator_C_Header(CTemplate &tpl, ofstream &head){
-    Generator_C_StubInfo(tpl, head);
+    Generate_C_StubInfo(tpl, head);
     size_t	t, i, tpl_domains_size, tmpDom_includes_size;
 
     head << "#ifndef __pd_" << tpl.prefix << "h__" << endl;
@@ -425,7 +425,7 @@ void	Generator_C_Header(CTemplate &tpl, ofstream &head){
 
 int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
                                 ofstream &src){
-    Generator_C_StubInfo(tpl, src);
+    Generate_C_StubInfo(tpl, src);
     size_t	t;
 
     src << "#define ART_NO_REDEF" << endl;
@@ -455,7 +455,7 @@ int	Generator_C_Source_ART_Part(CTemplate &tpl, char *tplfilename,
 
     src << "char*\tartsize_t2str(size_t size){" << endl;
     src << "static char buff[32];" << endl;
-    src << "sprintf(buff, \"%u\", size);" << endl;
+    src << "sprintf(buff, \"%zu\", size);" << endl;
     src << "return(buff);" << endl;
     src << "}" << endl << endl;
 
@@ -920,4 +920,455 @@ int	Generator_C(CTemplate &tpl, char *tplfilename,
     Generator_C_Header(tpl, head);
     retval = Generator_C_Source(tpl, tplfilename, source);
     return (retval);
+}
+
+int	Generate_Preload_C_Source_ART_Part_Declarations_real(CTemplate &tpl, ofstream &src) {
+    for(size_t d = 0, dl = tpl.domains.size(); d < dl; d++) {
+        src << endl;
+        for (size_t i = 0, il = tpl.domains[d].allocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].allocators[i].args[0].type <<
+                   " (*real_" << tpl.domains[d].allocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].allocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].allocators[i].args[a].type << " " <<
+                       tpl.domains[d].allocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].allocators[i].args[a].type << " " <<
+                   tpl.domains[d].allocators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].operators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].operators[i].args[0].type <<
+                   " (*real_" << tpl.domains[d].operators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].operators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].operators[i].args[a].type << " " <<
+                       tpl.domains[d].operators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].operators[i].args[a].type << " " <<
+                   tpl.domains[d].operators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].deallocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].deallocators[i].args[0].type <<
+                   " (*real_" << tpl.domains[d].deallocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].deallocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+                       tpl.domains[d].deallocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+                   tpl.domains[d].deallocators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].reallocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].reallocators[i].args[0].type <<
+                   " (*real_" << tpl.domains[d].reallocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].reallocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+                       tpl.domains[d].reallocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+                   tpl.domains[d].reallocators[i].args[a].name << ");" << endl;
+        }
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_ART_Part_Declarations_art(CTemplate &tpl, ofstream &src) {
+    for(size_t d = 0, dl = tpl.domains.size(); d < dl; d++) {
+        src << endl;
+        for (size_t i = 0, il = tpl.domains[d].allocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].allocators[i].args[0].type <<
+                   " (*real_restracer_" << tpl.domains[d].allocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].allocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].allocators[i].args[a].type << " " <<
+                       tpl.domains[d].allocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].allocators[i].args[a].type << " " <<
+                   tpl.domains[d].allocators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].operators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].operators[i].args[0].type <<
+                   " (*real_restracer_" << tpl.domains[d].operators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].operators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].operators[i].args[a].type << " " <<
+                       tpl.domains[d].operators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].operators[i].args[a].type << " " <<
+                   tpl.domains[d].operators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].deallocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].deallocators[i].args[0].type <<
+                   " (*real_restracer_" << tpl.domains[d].deallocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].deallocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+                       tpl.domains[d].deallocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+                   tpl.domains[d].deallocators[i].args[a].name << ");" << endl;
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].reallocators.size(); i < il; i++) {
+            src << "static " << tpl.domains[d].reallocators[i].args[0].type <<
+                   " (*real_restracer_" << tpl.domains[d].reallocators[i].name << ")(";
+            size_t a, al;
+            for (a = 1, al = tpl.domains[d].reallocators[i].args.size(); a < al - 1; a++) {
+                src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+                       tpl.domains[d].reallocators[i].args[a].name << ", ";
+            }
+            src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+                   tpl.domains[d].reallocators[i].args[a].name << ");" << endl;
+        }
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_ART_Part_LoadAddrs(CTemplate &tpl, ofstream &src) {
+    src << endl;
+    src << "__attribute__((constructor))" << endl;
+    src << "static void init() {" << endl;
+
+    for(size_t d = 0, dl = tpl.domains.size(); d < dl; d++) {
+        for (size_t i = 0, il = tpl.domains[d].allocators.size(); i < il; i++) {
+            src << "    real_" << tpl.domains[d].allocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"" << tpl.domains[d].allocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_" << tpl.domains[d].allocators[i].name << " = %p\\n\", real_"
+                << tpl.domains[d].allocators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].operators.size(); i < il; i++) {
+            src << "    real_" << tpl.domains[d].operators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"" << tpl.domains[d].operators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_" << tpl.domains[d].operators[i].name << " = %p\\n\", real_"
+                << tpl.domains[d].operators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].deallocators.size(); i < il; i++) {
+            src << "    real_" << tpl.domains[d].deallocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"" << tpl.domains[d].deallocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_" << tpl.domains[d].deallocators[i].name << " = %p\\n\", real_"
+                << tpl.domains[d].deallocators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].reallocators.size(); i < il; i++) {
+            src << "    real_" << tpl.domains[d].reallocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"" << tpl.domains[d].reallocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_" << tpl.domains[d].reallocators[i].name << " = %p\\n\", real_"
+                << tpl.domains[d].reallocators[i].name << ");" << endl;
+#endif
+        }
+
+        for (size_t i = 0, il = tpl.domains[d].allocators.size(); i < il; i++) {
+            src << "    real_restracer_" << tpl.domains[d].allocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"art_" << tpl.domains[d].allocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_restracer_" << tpl.domains[d].allocators[i].name << " = %p\\n\", real_restracer_"
+                << tpl.domains[d].allocators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].operators.size(); i < il; i++) {
+            src << "    real_restracer_" << tpl.domains[d].operators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"art_" << tpl.domains[d].operators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_restracer_" << tpl.domains[d].operators[i].name << " = %p\\n\", real_restracer_"
+                << tpl.domains[d].operators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].deallocators.size(); i < il; i++) {
+            src << "    real_restracer_" << tpl.domains[d].deallocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"art_" << tpl.domains[d].deallocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_restracer_" << tpl.domains[d].deallocators[i].name << " = %p\\n\", real_restracer_"
+                << tpl.domains[d].deallocators[i].name << ");" << endl;
+#endif
+        }
+        for (size_t i = 0, il = tpl.domains[d].reallocators.size(); i < il; i++) {
+            src << "    real_restracer_" << tpl.domains[d].reallocators[i].name <<
+                   " = dlsym(RTLD_NEXT, \"art_" << tpl.domains[d].reallocators[i].name << "\");" << endl;
+#ifdef ART_DEBUG
+            src << "    fprintf(stderr, \"real_restracer_" << tpl.domains[d].reallocators[i].name << " = %p\\n\", real_restracer_"
+                << tpl.domains[d].reallocators[i].name << ");" << endl;
+#endif
+        }
+    }
+
+    src << "}" << endl;
+
+    return 0;
+}
+
+int Generate_Preload_C_Source_ART_Part_Checker(CTemplate &tpl, ofstream &src) {
+    (void)tpl;
+
+    src << endl;
+    src << "static int is_restracer_call(void *real_art, void *actual_call) {" << endl;
+    src << "    ssize_t r_art, a_call, delta;" << endl;
+    src << "    int     retaddr_reasonable_near_foo_start;" << endl;
+    src << endl;
+    src << "    r_art = (ssize_t)real_art;" << endl;
+    src << "    a_call = (ssize_t)actual_call;" << endl;
+    src << endl;
+    src << "    delta = a_call - r_art;" << endl;
+    src << "    if(delta < 0) delta *= -1;" << endl;
+    src << "    if(delta < 100) retaddr_reasonable_near_foo_start = 1;" << endl;
+    src << "    else            retaddr_reasonable_near_foo_start = 0;" << endl;
+    src << endl;
+    src << "    return retaddr_reasonable_near_foo_start;" << endl;
+    src << "}" << endl;
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_ART_Part(CTemplate &tpl, ofstream &src) {
+    Generate_C_StubInfo(tpl, src);
+
+    src << "#define _GNU_SOURCE" << endl;
+    src << "#include <stdio.h>"  << endl;
+    src << "#include <dlfcn.h>" << endl;
+
+    Generate_Preload_C_Source_ART_Part_Declarations_real(tpl, src);
+    Generate_Preload_C_Source_ART_Part_Declarations_art(tpl, src);
+    Generate_Preload_C_Source_ART_Part_LoadAddrs(tpl, src);
+    Generate_Preload_C_Source_ART_Part_Checker(tpl, src);
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_USER_Part_allocators(CTemplate &tpl, ofstream &src, size_t d) {
+    for (size_t i = 0, il = tpl.domains[d].allocators.size(); i < il; i++) {
+        src << endl;
+        src << tpl.domains[d].allocators[i].args[0].type <<
+               " " << tpl.domains[d].allocators[i].name << "(";
+        ssize_t a, al;
+        for (a = 1, al = tpl.domains[d].allocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].allocators[i].args[a].type << " " <<
+                   tpl.domains[d].allocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].allocators[i].args[a].type << " " <<
+               tpl.domains[d].allocators[i].args[a].name << ") {" << endl;
+
+        src << "    void *bra = __builtin_return_address(0);" << endl;
+        src << "    if(!is_restracer_call(real_restracer_" << tpl.domains[d].allocators[i].name << ", bra)) {" << endl;
+        src << "        char *c = 0;" << endl;
+        src << "        write(2, \"calling not from restracer wrapper (0x\\n\", 39);" << endl;
+        src << "        /* fprintf(stderr, \"" << tpl.domains[d].allocators[i].name <<
+               "(): calling not from restracer wrapper (%p), but from %p\\n\", real_restracer_"
+            << tpl.domains[d].allocators[i].name << ", bra);" << endl;
+        src << "        fprintf(stderr, \"delta from restracer wrapper is %ld bytes\\n\", (ssize_t)real_restracer_"
+            << tpl.domains[d].allocators[i].name << " - (ssize_t)bra);" << endl;
+        src << "        fprintf(stderr, \"trapping to backtrace...\\n\"); */" << endl;
+        src << "        *c = 0x33;" << endl;
+        src << "    }" << endl;
+        src << endl;
+
+        if("void" != tpl.domains[d].allocators[i].args[0].type) {
+            src << "    " << tpl.domains[d].allocators[i].args[0].type << " rv = real_" << tpl.domains[d].allocators[i].name << "(";
+        }
+        else src << "    real_" << tpl.domains[d].allocators[i].name << "(";
+
+        for (a = 1, al = tpl.domains[d].allocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].allocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].allocators[i].args[a].name << ");" << endl;
+
+        src << "    /* fprintf(stderr, \"" <<  tpl.domains[d].allocators[i].args[a].name << "(%zd) = %p\\n\", size, ptr); */" << endl;
+
+        if("" != tpl.domains[d].allocators[i].args[0].type)
+            src << "    return rv;" << endl;
+        else
+            src << "    return;" << endl;
+
+        src << "}" << endl;
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_USER_Part_operators(CTemplate &tpl, ofstream &src, size_t d) {
+    for (size_t i = 0, il = tpl.domains[d].operators.size(); i < il; i++) {
+        src << endl;
+        src << tpl.domains[d].operators[i].args[0].type <<
+               " " << tpl.domains[d].operators[i].name << "(";
+        ssize_t a, al;
+        for (a = 1, al = tpl.domains[d].operators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].operators[i].args[a].type << " " <<
+                   tpl.domains[d].operators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].operators[i].args[a].type << " " <<
+               tpl.domains[d].operators[i].args[a].name << ") {" << endl;
+
+        src << "    void *bra = __builtin_return_address(0);" << endl;
+        src << "    if(!is_restracer_call(real_restracer_" << tpl.domains[d].operators[i].name << ", bra)) {" << endl;
+        src << "        char *c = 0;" << endl;
+        src << "        write(2, \"calling not from restracer wrapper (0x\\n\", 39);" << endl;
+        src << "        /* fprintf(stderr, \"" << tpl.domains[d].operators[i].name <<
+               "(): calling not from restracer wrapper (%p), but from %p\\n\", real_restracer_"
+            << tpl.domains[d].operators[i].name << ", bra);" << endl;
+        src << "        fprintf(stderr, \"delta from restracer wrapper is %ld bytes\\n\", (ssize_t)real_restracer_"
+            << tpl.domains[d].operators[i].name << " - (ssize_t)bra);" << endl;
+        src << "        fprintf(stderr, \"trapping to backtrace...\\n\"); */" << endl;
+        src << "        *c = 0x33;" << endl;
+        src << "    }" << endl;
+        src << endl;
+
+        if("void" != tpl.domains[d].operators[i].args[0].type) {
+            src << "    " << tpl.domains[d].operators[i].args[0].type << " rv = real_" << tpl.domains[d].operators[i].name << "(";
+        }
+        else src << "    real_" << tpl.domains[d].operators[i].name << "(";
+
+        for (a = 1, al = tpl.domains[d].operators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].operators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].operators[i].args[a].name << ");" << endl;
+
+        src << "    /* fprintf(stderr, \"" <<  tpl.domains[d].operators[i].args[a].name << "(%zd) = %p\\n\", size, ptr); */" << endl;
+
+        if("" != tpl.domains[d].operators[i].args[0].type)
+            src << "    return rv;" << endl;
+        else
+            src << "    return;" << endl;
+
+        src << "}" << endl;
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_USER_Part_deallocators(CTemplate &tpl, ofstream &src, size_t d) {
+    for (size_t i = 0, il = tpl.domains[d].deallocators.size(); i < il; i++) {
+        src << endl;
+        src << tpl.domains[d].deallocators[i].args[0].type <<
+               " " << tpl.domains[d].deallocators[i].name << "(";
+        ssize_t a, al;
+        for (a = 1, al = tpl.domains[d].deallocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+                   tpl.domains[d].deallocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].deallocators[i].args[a].type << " " <<
+               tpl.domains[d].deallocators[i].args[a].name << ") {" << endl;
+
+        src << "    void *bra = __builtin_return_address(0);" << endl;
+        src << "    if(!is_restracer_call(real_restracer_" << tpl.domains[d].deallocators[i].name << ", bra)) {" << endl;
+        src << "        char *c = 0;" << endl;
+        src << "        write(2, \"calling not from restracer wrapper (0x\\n\", 39);" << endl;
+        src << "        /* fprintf(stderr, \"" << tpl.domains[d].deallocators[i].name <<
+               "(): calling not from restracer wrapper (%p), but from %p\\n\", real_restracer_"
+            << tpl.domains[d].deallocators[i].name << ", bra);" << endl;
+        src << "        fprintf(stderr, \"delta from restracer wrapper is %ld bytes\\n\", (ssize_t)real_restracer_"
+            << tpl.domains[d].deallocators[i].name << " - (ssize_t)bra);" << endl;
+        src << "        fprintf(stderr, \"trapping to backtrace...\\n\"); */" << endl;
+        src << "        *c = 0x33;" << endl;
+        src << "    }" << endl;
+        src << endl;
+
+        if("void" != tpl.domains[d].deallocators[i].args[0].type) {
+            src << "    " << tpl.domains[d].deallocators[i].args[0].type << " rv = real_" << tpl.domains[d].deallocators[i].name << "(";
+        }
+        else src << "    real_" << tpl.domains[d].deallocators[i].name << "(";
+
+        for (a = 1, al = tpl.domains[d].deallocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].deallocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].deallocators[i].args[a].name << ");" << endl;
+
+        src << "    /* fprintf(stderr, \"" <<  tpl.domains[d].deallocators[i].args[a].name << "(%zd) = %p\\n\", size, ptr); */" << endl;
+
+        if("void" != tpl.domains[d].deallocators[i].args[0].type)
+            src << "    return rv;" << endl;
+        else
+            src << "    return;" << endl;
+
+        src << "}" << endl;
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_USER_Part_reallocators(CTemplate &tpl, ofstream &src, size_t d) {
+    for (size_t i = 0, il = tpl.domains[d].reallocators.size(); i < il; i++) {
+        src << endl;
+        src << tpl.domains[d].reallocators[i].args[0].type <<
+               " " << tpl.domains[d].reallocators[i].name << "(";
+        ssize_t a, al;
+        for (a = 1, al = tpl.domains[d].reallocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+                   tpl.domains[d].reallocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].reallocators[i].args[a].type << " " <<
+               tpl.domains[d].reallocators[i].args[a].name << ") {" << endl;
+
+        src << "    void *bra = __builtin_return_address(0);" << endl;
+        src << "    if(!is_restracer_call(real_restracer_" << tpl.domains[d].reallocators[i].name << ", bra)) {" << endl;
+        src << "        char *c = 0;" << endl;
+        src << "        write(2, \"calling not from restracer wrapper (0x\\n\", 39);" << endl;
+        src << "        /* fprintf(stderr, \"" << tpl.domains[d].reallocators[i].name <<
+               "(): calling not from restracer wrapper (%p), but from %p\\n\", real_restracer_"
+            << tpl.domains[d].reallocators[i].name << ", bra);" << endl;
+        src << "        /* fprintf(stderr, \"delta from restracer wrapper is %ld bytes\\n\", (ssize_t)real_restracer_"
+            << tpl.domains[d].reallocators[i].name << " - (ssize_t)bra);" << endl;
+        src << "        fprintf(stderr, \"trapping to backtrace...\\n\"); */" << endl;
+        src << "        *c = 0x33;" << endl;
+        src << "    }" << endl;
+        src << endl;
+
+        if("void" != tpl.domains[d].reallocators[i].args[0].type) {
+            src << "    " << tpl.domains[d].reallocators[i].args[0].type << " rv = real_" << tpl.domains[d].reallocators[i].name << "(";
+        }
+        else src << "    real_" << tpl.domains[d].reallocators[i].name << "(";
+
+        for (a = 1, al = tpl.domains[d].reallocators[i].args.size(); a < al - 1; a++) {
+            src << tpl.domains[d].reallocators[i].args[a].name << ", ";
+        }
+        src << tpl.domains[d].reallocators[i].args[a].name << ");" << endl;
+
+        src << "    /* fprintf(stderr, \"" <<  tpl.domains[d].reallocators[i].args[a].name << "(%zd) = %p\\n\", size, ptr); */" << endl;
+
+        if("void" != tpl.domains[d].reallocators[i].args[0].type)
+            src << "    return rv;" << endl;
+        else
+            src << "    return;" << endl;
+
+        src << "}" << endl;
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source_USER_Part(CTemplate &tpl, ofstream &src) {
+    for(size_t d = 0, dl = tpl.domains.size(); d < dl; d++) {
+        Generate_Preload_C_Source_USER_Part_allocators(tpl, src, d);
+        Generate_Preload_C_Source_USER_Part_operators(tpl, src, d);
+        Generate_Preload_C_Source_USER_Part_deallocators(tpl, src, d);
+        Generate_Preload_C_Source_USER_Part_reallocators(tpl, src, d);
+    }
+
+    return 0;
+}
+
+int	Generate_Preload_C_Source(CTemplate &tpl, ofstream &src) {
+    int retval;
+    retval = Generate_Preload_C_Source_ART_Part(tpl, src);
+    if(retval) return retval;
+    retval = Generate_Preload_C_Source_USER_Part(tpl, src);
+    return retval;
+}
+
+int Generate_Preload_C(CTemplate &tpl, const char *source_file) {
+    int retval;
+    ofstream source(source_file);
+    retval = Generate_Preload_C_Source(tpl, source);
+    return retval;
 }

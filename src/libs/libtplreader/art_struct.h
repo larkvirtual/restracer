@@ -1,5 +1,5 @@
-#ifndef __art_struct_h_
-#define __art_struct_h_
+#ifndef art_struct_h_
+#define art_struct_h_
 
 #include <string>
 #include "art_defs.h"
@@ -13,7 +13,7 @@ public:
     type,	// пользовательский тип: "int", "ssize_t", "gint", ...
     // type == "" если это XXX
     value;	// пользовательское значение: "0", "NULL", "-1", "ERR_OK", ...
-    
+
 #ifdef ART_DEBUG
     void dump(size_t ntabs);
 #endif
@@ -25,7 +25,7 @@ class CArg{
 public:
     string	type,	// пользовательский тип: "int", "void *", "LTGERR", "MyType", ...
     name;	// пользовательское имя: "fd", "b", "ltgerr", "MyValidValue", ...
-    
+
 #ifdef ART_DEBUG
     void dump(size_t ntabs);
 #endif

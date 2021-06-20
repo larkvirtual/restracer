@@ -42,6 +42,8 @@ fedora-build-release:
     paths:
       - src/artlibgen/src/artlibgen
       - src/artrepgen/artrepgen
+      - src/utils/restracer_preload/restracer_preload.so
+      - src/utils/restracer_fullpather/restracer_fullpather
       - src/artlibgen/templates/
   cache:
     paths:
@@ -64,7 +66,7 @@ fedora-test-file:
   tags:
     - docker
   before_script:
-    - dnf install -y make gcc-c++ libxml++ findutils diffutils
+    - dnf install -y make gcc-c++ libxml++ findutils diffutils procps-ng
   script:
     - make install
     - cd regressions/features && make tracefile-method
@@ -86,7 +88,7 @@ fedora-test-networked:
   tags:
     - docker
   before_script:
-    - dnf install -y make gcc-c++ libxml++ findutils diffutils
+    - dnf install -y make gcc-c++ libxml++ findutils diffutils psmisc
   script:
     - make install
     - cd regressions/features && make networked-method

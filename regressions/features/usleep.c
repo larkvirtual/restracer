@@ -1,4 +1,6 @@
 #include <unistd.h> /* usleep() */
+#include <stdio.h>  /* printf() */
+#include <stdlib.h> /* atoi() */
 
 int main(int argc, char **argv) {
 if(2 == argc) {

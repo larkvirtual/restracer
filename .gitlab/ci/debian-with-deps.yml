@@ -1,10 +1,13 @@
+variables:
+  IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
+#    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
+#blacknote.site resolves as white IP address inside DinD, so skipped
+
 debian-build-debug:
-  image: debian
+  image: ${IMG}:build
   stage: build
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-dev g++
   script:
     - NPROC=$(nproc)
     - echo "Using '$NPROC' processes to build source..."
@@ -17,12 +20,10 @@ debian-build-debug:
       allow_failure: true
 
 debian-build-release:
-  image: debian
+  image: ${IMG}:build
   stage: build
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-dev g++
   script:
     - NPROC=$(nproc)
     - echo "Using '$NPROC' processes to build source..."
@@ -48,12 +49,10 @@ debian-build-release:
       allow_failure: true
 
 debian-test-file:
-  image: debian
+  image: ${IMG}:test-file
   stage: test
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-2v5 gcc
   script:
     - make install
     - cd regressions/features && make tracefile-method
@@ -67,12 +66,10 @@ debian-test-file:
       allow_failure: true
 
 debian-test-networked:
-  image: debian
+  image: ${IMG}:test-netw
   stage: test
   tags:
     - docker
-  before_script:
-    - apt update && apt -y install make libxml++2.6-2v5 psmisc gcc
   script:
     - make install
     - cd regressions/features && make networked-method

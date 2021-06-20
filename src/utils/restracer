@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$RT_CHK_INSTRUM" = "1" ]; then
+    LD_PRELOAD=/usr/local/lib/restracer/templates/$RT_TEMPLATE/preload/restracer_preload.so exec $*
+else
+    exec $*
+
+## FIXME: $* can have many args
+#    pwdx $PPID | awk '{print $2}' | xargs restracer_fullpather $* | xargs sh
+fi

@@ -12,6 +12,12 @@ if [ -z "$RT_TEMPLATE" ]; then
 fi
 TEMPLATE_PATH=/usr/local/lib/restracer/templates/$RT_TEMPLATE
 
+if [ "$RT_DYNAMIC" = "1" ]; then
+    LIB_EXT="dynamic/*.so"
+else
+    LIB_EXT="static/*.o"
+fi
+
 for arg in $*; do
    if [ "$arg" = "-c" ]; then option_compile=1;
    elif [ "$arg" = "-o" ]; then option_output=1;
@@ -34,12 +40,12 @@ if [ "$compilation" -eq "1" ]; then
         echo "doing -include $TEMPLATE_PATH/art.h"
         c++ -include $TEMPLATE_PATH/art.h $*
     else
-        echo "doing -include $TEMPLATE_PATH/art.h $TEMPLATE_PATH/*.o"
-        c++ -include $TEMPLATE_PATH/art.h $* $TEMPLATE_PATH/*.o
+        echo "doing -include $TEMPLATE_PATH/art.h $TEMPLATE_PATH/${LIB_EXT}"
+        c++ -include $TEMPLATE_PATH/art.h $* $TEMPLATE_PATH/${LIB_EXT}
     fi
 elif [ "$linking" -eq "1" ]; then
-    echo "doing $TEMPLATE_PATH/*.o"
-    c++ $* $TEMPLATE_PATH/*.o
+    echo "doing $TEMPLATE_PATH/${LIB_EXT}"
+    c++ $* $TEMPLATE_PATH/${LIB_EXT}
 else
     echo "doing -include $TEMPLATE_PATH/art.h"
     c++ -include $TEMPLATE_PATH/art.h $*
