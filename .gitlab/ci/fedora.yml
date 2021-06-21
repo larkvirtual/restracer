@@ -49,7 +49,7 @@ fedora-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -73,7 +73,7 @@ fedora-test-file:
   dependencies:
     - fedora-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -97,7 +97,7 @@ fedora-test-networked:
   dependencies:
     - fedora-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always

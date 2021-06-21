@@ -10,7 +10,7 @@ debian-build-debug:
     - echo "Using '$NPROC' processes to build source..."
     - make debug -j$NPROC
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -41,7 +41,7 @@ debian-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -62,7 +62,7 @@ debian-test-file:
   dependencies:
     - debian-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -83,7 +83,7 @@ debian-test-networked:
   dependencies:
     - debian-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always

@@ -33,7 +33,7 @@ freebsd-make-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -55,7 +55,7 @@ freebsd-make-test-file:
   dependencies:
     - freebsd-make-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
@@ -75,7 +75,7 @@ freebsd-make-test-networked:
   dependencies:
     - freebsd-make-build-release
   rules:
-    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
