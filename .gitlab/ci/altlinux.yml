@@ -1,28 +1,3 @@
-#alt-build-debug:
-##  image: ${IMG}:build
-#
-##  image: alt
-#  image: ${IMG}
-#  stage: build
-#  tags:
-#    - docker
-#  before_script:
-#    - apt-get update && apt-get install -y make gcc-c++ libxml++2-devel
-#  script:
-#    - NPROC=$(nproc)
-#    - echo "Using '$NPROC' processes to build source..."
-#    - make debug -j$NPROC
-#  rules:
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
-#      when: always
-#    - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
-#      when: manual
-#      allow_failure: true
-
-#    IMG: alt:sisyphus
-#    IMG: alt:p9
-#    IMG: alt:p8
-
 alt-build-release:
   image: alt
   stage: build
@@ -51,6 +26,8 @@ alt-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -75,6 +52,8 @@ alt-test-file:
   dependencies:
     - alt-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -83,7 +62,6 @@ alt-test-file:
 
 alt-test-networked:
   image: alt
-  image: ${IMG}
   stage: test
   tags:
     - docker
@@ -100,6 +78,8 @@ alt-test-networked:
   dependencies:
     - alt-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'

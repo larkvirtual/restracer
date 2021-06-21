@@ -42,8 +42,6 @@ fedora-build-release:
     paths:
       - src/artlibgen/src/artlibgen
       - src/artrepgen/artrepgen
-      - src/utils/restracer_preload/restracer_preload.so
-      - src/utils/restracer_fullpather/restracer_fullpather
       - src/artlibgen/templates/
   cache:
     paths:
@@ -51,6 +49,8 @@ fedora-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -73,6 +73,8 @@ fedora-test-file:
   dependencies:
     - fedora-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -95,6 +97,8 @@ fedora-test-networked:
   dependencies:
     - fedora-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'

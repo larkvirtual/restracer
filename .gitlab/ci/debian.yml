@@ -10,6 +10,8 @@ debian-build-debug:
     - echo "Using '$NPROC' processes to build source..."
     - make debug -j$NPROC
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -32,8 +34,6 @@ debian-build-release:
     paths:
       - src/artlibgen/src/artlibgen
       - src/artrepgen/artrepgen
-      - src/utils/restracer_preload/restracer_preload.so
-      - src/utils/restracer_fullpather/restracer_fullpather
       - src/artlibgen/templates/
   cache:
     paths:
@@ -41,6 +41,8 @@ debian-build-release:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -60,6 +62,8 @@ debian-test-file:
   dependencies:
     - debian-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
@@ -79,6 +83,8 @@ debian-test-networked:
   dependencies:
     - debian-build-release
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'

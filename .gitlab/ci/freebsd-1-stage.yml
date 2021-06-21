@@ -19,6 +19,8 @@ freebsd-make-build-release-test-networked:
       - "src/libs/libtplreader/*.o"
       - "src/artlibgen/src/*.o"
   rules:
+    - if: '$CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH'
+      when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]\.[A-F]$/'
       when: always
     - if: '$CI_COMMIT_REF_NAME =~ /^[0-9]+\-/'
