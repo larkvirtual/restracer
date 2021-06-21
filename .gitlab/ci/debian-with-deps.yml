@@ -1,10 +1,19 @@
-variables:
-  IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
-#    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
-#blacknote.site resolves as white IP address inside DinD, so skipped
+# For some reason next lines produces an error:
+# 'Running with gitlab-runner 13.12.0 (7a6612da)
+#  on DinD linux abuPZkTg
+#Preparing the "docker" executor 00:05
+#Using Docker executor with image fedora:build ...
+#Pulling docker image fedora:build ...
+#WARNING: Failed to pull image with policy "always": Error response from daemon: manifest for fedora:build not found: manifest unknown: manifest unknown (manager.go:205:3s)
+#ERROR: Job failed (system failure): failed to pull image "fedora:build" with specified policies [always]: Error response from daemon: manifest for fedora:build not found: manifest unknown: manifest unknown (manager.go:205:3s)'
+# To escape this, every target uses hardcoded URL, not an IMG variable usage
+#variables:
+#  IMG: registry.gitlab.com/docker-images10/debian-plus-build-deps
+##    IMG: blacknote.site:5050/restracer/debian-plus-build-deps
+##blacknote.site resolves as white IP address inside DinD, so skipped
 
 debian-build-debug:
-  image: ${IMG}:build
+  image: registry.gitlab.com/docker-images10/debian-plus-build-deps:build
   stage: build
   tags:
     - docker
@@ -22,7 +31,7 @@ debian-build-debug:
       allow_failure: true
 
 debian-build-release:
-  image: ${IMG}:build
+  image: registry.gitlab.com/docker-images10/debian-plus-build-deps:build
   stage: build
   tags:
     - docker
@@ -51,7 +60,7 @@ debian-build-release:
       allow_failure: true
 
 debian-test-file:
-  image: ${IMG}:test-file
+  image: registry.gitlab.com/docker-images10/debian-plus-build-deps:test-file
   stage: test
   tags:
     - docker
@@ -70,7 +79,7 @@ debian-test-file:
       allow_failure: true
 
 debian-test-networked:
-  image: ${IMG}:test-netw
+  image: registry.gitlab.com/docker-images10/debian-plus-build-deps:test-netw
   stage: test
   tags:
     - docker
