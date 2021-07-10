@@ -4,6 +4,7 @@ SED=$(type gsed > /dev/null && echo gsed || echo sed)
 
 passOK=0
 passFAILED=0
+OKlist=""
 FAILEDlist=""
 total=0
 
@@ -28,6 +29,7 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
         grep "calling not from restracer wrapper (0x"               restracer-err.txt > /dev/null
         if [ $? = 0 ]; then
             passOK=$((passOK+1))
+            OKlist="$OKlist $d"
             echo "$i OK";
         else
             passFAILED=$((passFAILED+1))
@@ -51,6 +53,7 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
             rm .real
             mv tracefile.out .tracefile.out
             passOK=$((passOK+1))
+            OKlist="$OKlist $d"
             echo "$i OK";
         elif [ -f .right-freebsd ]; then # FreeBSD specific behavior handling
             diff -u .real .right-freebsd
@@ -58,6 +61,7 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
                 rm .real
                 mv tracefile.out .tracefile.out
                 passOK=$((passOK+1))
+                OKlist="$OKlist $d"
                 echo "$i OK";
             else
                 passFAILED=$((passFAILED+1))
@@ -86,6 +90,9 @@ echo '**************************************************************************
 
 echo "-------------------------------------"
 echo "TOTAL PASSED: $passOK/$total"
+if [ "$OKlist" != "" ]; then
+    echo "OK list: $OKlist"
+fi
 echo "TOTAL FAILED: $passFAILED"
 if [ "$FAILEDlist" != "" ]; then
     echo "FAILED list: $FAILEDlist"
