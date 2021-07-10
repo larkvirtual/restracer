@@ -18,6 +18,7 @@ killall -9 artrepgen || true
 
 passOK=0
 passFAILED=0
+OKlist=""
 FAILEDlist=""
 total=0
 
@@ -43,6 +44,7 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
 
         if [ $? = 0 ]; then
             passOK=$((passOK+1))
+            OKlist="$OKlist $d"
             echo "$i OK";
         else
             passFAILED=$((passFAILED+1))
@@ -52,40 +54,41 @@ for d in `find . -type d -name "0[0-9]*" | sort`; do
         RT_MAKE_CHK_INSTRUM_ARG=0
         RT_DYNAMIC_ARG=0
 
-    artrepgen --sock 12345 >     "$d/.real" &
-    ./usleep $repGenStartupTime
+        artrepgen --sock 12345 >     "$d/.real" &
+        ./usleep $repGenStartupTime
 
-    cd "$d" && \
-    CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE RT_DYNAMIC=$RT_DYNAMIC_ARG rt-gmake \
-    && RT_CHK_INSTRUM=$RT_MAKE_CHK_INSTRUM_ARG restracer ./main || true
+        cd "$d" && \
+        CFLAGS="${CFLAGS} -g -ggdb" RT_TEMPLATE=$RT_TEMPLATE RT_DYNAMIC=$RT_DYNAMIC_ARG rt-gmake \
+        && RT_CHK_INSTRUM=$RT_MAKE_CHK_INSTRUM_ARG restracer ./main || true
 
-    ../usleep $repGenShutdownTime
-    killall -9 artrepgen || true
-    ${SED} -r -i 's/[0-9A-Z]{16}//g' .real
+        ../usleep $repGenShutdownTime
+        killall -9 artrepgen || true
+        ${SED} -r -i 's/[0-9A-Z]{16}//g' .real
 
-    diff -u .real .right
-    if [ $? -eq 0 ]; then
-        rm .real
-        passOK=$((passOK+1))
-        echo "$i OK";
-    elif [ -f .right-freebsd ]; then # FreeBSD specific behavior handling
-        diff -u .real .right-freebsd
+        diff -u .real .right
         if [ $? -eq 0 ]; then
             rm .real
             passOK=$((passOK+1))
             echo "$i OK";
+            OKlist="$OKlist $d"
+        elif [ -f .right-freebsd ]; then # FreeBSD specific behavior handling
+            diff -u .real .right-freebsd
+            if [ $? -eq 0 ]; then
+                rm .real
+                passOK=$((passOK+1))
+                echo "$i OK";
+                OKlist="$OKlist $d"
+            else
+                passFAILED=$((passFAILED+1))
+                echo "$i FAILED"
+                FAILEDlist="$FAILEDlist $d"
+            fi
         else
             passFAILED=$((passFAILED+1))
             echo "$i FAILED"
             FAILEDlist="$FAILEDlist $d"
         fi
-    else
-        passFAILED=$((passFAILED+1))
-        echo "$i FAILED"
-        FAILEDlist="$FAILEDlist $d"
     fi
-    fi
-
 
     total=$((total+1))
  #   popd    > /dev/null
@@ -115,12 +118,14 @@ for d in `find . -type d -name "1[0-9]*" | sort`; do
         rm .real
         passOK=$((passOK+1))
         echo "$i OK";
+        OKlist="$OKlist $d"
     elif [ -f .right-freebsd ]; then # FreeBSD specific behavior handling
         diff -u .real .right-freebsd
         if [ $? -eq 0 ]; then
             rm .real
             passOK=$((passOK+1))
             echo "$i OK";
+            OKlist="$OKlist $d"
         else
             passFAILED=$((passFAILED+1))
             echo "$i FAILED"
@@ -144,6 +149,9 @@ echo '**************************************************************************
 
 echo "-------------------------------------"
 echo "TOTAL PASSED: $passOK/$total"
+if [ "$OKlist" != "" ]; then
+    echo "OK list: $OKlist"
+fi
 echo "TOTAL FAILED: $passFAILED"
 if [ "$FAILEDlist" != "" ]; then
     echo "FAILED list: $FAILEDlist"
