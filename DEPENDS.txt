@@ -12,8 +12,10 @@ FreeBSD < 12
 # pkg_add -r libxml++26 gmake dmidecode?
 # (optional?) pkg_add -r pcre
 
+# Broken ATM
 Gentoo
 # emerge dev-cpp/libxmlpp dev-util/pkgconfig dmidecode?
 
+# Broken ATM
 Arch
 # pacman -S libxml++ dmidecode?
