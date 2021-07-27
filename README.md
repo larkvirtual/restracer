@@ -83,7 +83,6 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `GNU Make@FreeBSD:` `rt-gmake`
 - `BSD Make@FreeBSD:` `rt-make`
 - `./myApp`
-- `artrepgen --file tracefile.out`
 ##### Pros
 - Analyzer (`artrepgen`) can run on some remote location, outside container
 ##### Cons
@@ -97,6 +96,7 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `GNU Make@FreeBSD:` `RT_TEMPLATE=posix-gcc-mt-file-lint rt-gmake`
 - `BSD Make@FreeBSD:` `RT_TEMPLATE=posix-gcc-mt-file-lint rt-make`
 - `./myApp`
+- `artrepgen --file tracefile.out`
 #### Pros
 - More easy to debug restracer itself
 - Less tricky to run Analyzer (`artrepgen`)
