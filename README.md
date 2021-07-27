@@ -116,4 +116,5 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 ## Other OS/distros
 - `cd restracer`
 - `sudo make uninstall`
+- `cd ..`
 - `rm -rf restracer`
