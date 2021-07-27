@@ -29,6 +29,5 @@ put $DESTNAME.tar.xz.asc
 delete  $DESTNAMELINK
 delete  $DESTNAMELINK.asc
 put     $DESTNAMELINK
-put     $DESTNAMELINK.asc
-put .htaccess" | ftp -i skylark.tsu.ru
+put     $DESTNAMELINK.asc" | ftp -i skylark.tsu.ru
 echo "Ignore error messages like 'Could not delete restracer-current-linux-amd64.tar.xz: No such file or directory' if you see it"
