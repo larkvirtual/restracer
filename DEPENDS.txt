@@ -1,5 +1,8 @@
+Alt
+# apt-get install make gcc-c++ libxml++2-devel
+
 Debian GNU/Linux, Ubuntu
-# apt-get install make libxml++2.6-dev g++
+# apt-get install make g++ libxml++2.6-dev
 
 Fedora (34)
 # dnf install make libxml++-devel gcc-c++ findutils diffutils psmisc  #procps-ng
