@@ -13,7 +13,7 @@ fedora-build-release-n-test-networked:
     - export PATH=$PATH:$(pwd)/usr-local/bin
     - export    RT_ROOT=$(pwd)/usr-local
     - cd regressions/features
-    - RT_TEMPLATE=posix-gcc-mt-netw-lint make networked-method
+    - make networked-method
   rules:
     - if: '$CI_COMMIT_REF_NAME =~ $CI_DEFAULT_BRANCH'
       when: always
