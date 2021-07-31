@@ -68,14 +68,23 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `tar xf                                $DISTRO_TARBALL_NAME -C /usr --skip-old-files`
 
 ### Other OS/distros
+#### System-wide
 - `git clone https://github.com/larkvirtual/restracer.git`
 - `cd restracer`
 - `cat DEPENDS.txt`
 - `make -j$(nproc)`
 - `sudo make install`
+#### User-only
+- `git clone https://github.com/larkvirtual/restracer.git`
+- `cd restracer`
+- `cat DEPENDS.txt`
+- `make -j$(nproc)`
+- User-only: `DESTDIR=usr-local make install`
 
 ## Use
 ### Userspace (CLI/Daemon applications)
+- System-wide: no extra commands needed
+- User-only: `export PATH=$PATH:PATH-TO-RESTRACER/usr-local/bin; export RT_ROOT=PATH-TO-RESTRACER/usr-local`
 #### Networked method (traced application writes to socket, analyzer runs in the same time)
 - `cd src`
 - Put `art_start("myApp;autostart;");` call is a first function inside your `main()`
@@ -84,7 +93,7 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `BSD Make@FreeBSD:` `rt-make`
 - `./myApp`
 ##### Pros
-- Analyzer (`artrepgen`) can run on some remote location, outside container
+- Analyzer (`artrepgen`) can run on some remote location, outside of traced program (container)
 ##### Cons
 - Less easy to debug restracer itself
 - Network throughput performance may be primary importance
@@ -114,7 +123,10 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `rm -f $DISTRO_TARBALL_ASC_NAME        $DISTRO_TARBALL_NAME`
 
 ## Other OS/distros
+### System-wide
 - `cd restracer`
 - `sudo make uninstall`
 - `cd ..`
+- `rm -rf restracer`
+### User-only
 - `rm -rf restracer`
