@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SED=$(type gsed > /dev/null && echo gsed || echo sed)
+SED=$(type gsed > /dev/null 2> /dev/null && echo gsed || echo sed)
 
 passOK=0
 passFAILED=0

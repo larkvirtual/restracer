@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SED=$(type gsed > /dev/null && echo gsed || echo sed)
+SED=$(type gsed > /dev/null 2> /dev/null && echo gsed || echo sed)
 
 if ! [ -z "$CI_JOB_ID" ]; then
     # We are inside GitLab CI, setting other variables
