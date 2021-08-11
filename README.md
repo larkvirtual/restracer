@@ -79,7 +79,7 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `cd restracer`
 - `cat DEPENDS.txt`
 - `make -j$(nproc)`
-- User-only: `DESTDIR=usr-local make install`
+- `DESTDIR=usr-local make install`
 
 ## Use
 ### Userspace (CLI/Daemon applications)
@@ -91,9 +91,9 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `GNU Make@GNU/Linux:` `rt-make`
 - `GNU Make@FreeBSD:` `rt-gmake`
 - `BSD Make@FreeBSD:` `rt-make`
-- `./myApp`
+- `restracer ./myApp`
 ##### Pros
-- Analyzer (`artrepgen`) can run on some remote location, outside of traced program (container)
+- Analyzer (`artrepgen`) can run on some remote location, outside of traced program / container
 ##### Cons
 - Less easy to debug restracer itself
 - Network throughput performance may be primary importance
@@ -104,7 +104,7 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 - `GNU Make@GNU/Linux:` `RT_TEMPLATE=posix-gcc-mt-file-lint rt-make`
 - `GNU Make@FreeBSD:` `RT_TEMPLATE=posix-gcc-mt-file-lint rt-gmake`
 - `BSD Make@FreeBSD:` `RT_TEMPLATE=posix-gcc-mt-file-lint rt-make`
-- `./myApp`
+- `restracer ./myApp`
 - `artrepgen --file tracefile.out`
 #### Pros
 - More easy to debug restracer itself
