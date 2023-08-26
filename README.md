@@ -60,12 +60,13 @@ Environtment | BuildTool `GNU Make` | BuildTool `BSD Make` |
 
 ## Install
 ### Gentoo (stage3 or stage3+)
+- `sudo sh -c 'echo 92.63.64.5 skylark.tsu.ru >> /etc/hosts'`
 - `export GPG_KEY=B0414424; export DISTRO_TARBALL_NAME=restracer-current-linux-amd64.tar.xz; export DISTRO_TARBALL_ASC_NAME=$DISTRO_TARBALL_NAME.asc`
 - `gpg --keyserver hkp://pgp.mit.edu --recv-keys $GPG_KEY || gpg --keyserver hkp://keyserver.ubuntu.com --recv-keys $GPG_KEY || gpg --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-keys $GPG_KEY`
 - `wget http://skylark.tsu.ru/art/master/$DISTRO_TARBALL_NAME`
 - `wget http://skylark.tsu.ru/art/master/$DISTRO_TARBALL_ASC_NAME`
 - `gpg --verify                          $DISTRO_TARBALL_ASC_NAME`
-- `tar xf                                $DISTRO_TARBALL_NAME -C /usr --skip-old-files`
+- `sudo tar xf                           $DISTRO_TARBALL_NAME -C /usr --skip-old-files`
 
 ### Other OS/distros
 #### System-wide
