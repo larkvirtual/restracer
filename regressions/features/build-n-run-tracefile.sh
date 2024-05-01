@@ -85,7 +85,7 @@ done
 
 echo '******************************************************************************'
 echo '* WARNING: if template art_start_selfinit="false" => 018/main.c WILL FAIL!!! *'
-echo "* THIS IS TOTALLY FINE, CUZ 018.c doesn't contain art_start()                *"
+echo "* THIS IS TOTALLY FINE, BECAUSE 018.c doesn't contain art_start()                *"
 echo '******************************************************************************'
 
 echo "-------------------------------------"
